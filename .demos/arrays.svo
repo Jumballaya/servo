@@ -1,6 +1,16 @@
-let double = fn(x) { 2 * x };
+let Array = require("./Array.svo");
 
-let arr = [1, 2, 3, double(4)];
-let array = [6, 5, 4, double(arr[0]), double(len(arr))];
+let double = fn(x) { x * 2 };
+let isOdd = fn(x) {
+  let half = x / 2;
+  let r = x - (half * 2);
+  if (r > 0) { return true };
+  false;
+};
+let sum = fn(initial, el) { initial + el }
 
-log(array);
+let test = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+
+log(Array["filter"](test, isOdd))
+log(Array["map"](test, double))
+log(Array["reduce"](test, 0, sum))

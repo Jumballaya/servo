@@ -30,13 +30,14 @@ None made so far
 
   1. Comments: # and //
   2. Single quotes for strings
-  3. Require function for binding an evaluated file to an identifier
-  4. Wrappr for Go's HTTP functions
+  3. Dot notation for hashes
+  4. Require function for binding an evaluated file to an identifier
+  5. Wrappr for Go's HTTP functions
     * Routing string parser
     * Route function
     * Route middleware
     * Static files
     * Forms
-  5. JSON support
-  6. Templates
-  7. Documentation and examples
+  6. JSON support
+  7. Templates
+  8. Documentation and examples
