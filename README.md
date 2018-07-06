@@ -39,3 +39,4 @@ None made so far
     * Forms
   5. JSON support
   6. Templates
+  7. Documentation and examples
