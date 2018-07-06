@@ -61,19 +61,6 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		}
 		return evalIndexExpression(left, index)
 
-	// Dot Index Expression
-	case *ast.DotIndexExpression:
-		left := Eval(node.Left, env)
-		if isError(left) {
-			return left
-		}
-
-		index := Eval(node.Index, env)
-		if isError(index) {
-			return index
-		}
-		return evalDotIndexExpression(left, index)
-
 	// Prefix
 	case *ast.PrefixExpression:
 		right := Eval(node.Right, env)
@@ -328,6 +315,7 @@ func evalIfExpression(ie *ast.IfExpression, env *object.Environment) object.Obje
 }
 
 func evalIdentifier(node *ast.Identifier, env *object.Environment) object.Object {
+	fmt.Println(node)
 	if val, ok := env.Get(node.Value); ok {
 		return val
 	}
@@ -351,17 +339,6 @@ func nativeBooleanToBooleanObject(val bool) *object.Boolean {
 }
 
 func evalIndexExpression(left, index object.Object) object.Object {
-	switch {
-	case left.Type() == object.ARRAY_OBJ && index.Type() == object.INTEGER_OBJ:
-		return evalArrayIndexExpression(left, index)
-	case left.Type() == object.HASH_OBJ:
-		return evalHashIndexExpression(left, index)
-	default:
-		return newError("index operator not supported: %s", left.Type())
-	}
-}
-
-func evalDotIndexExpression(left, index object.Object) object.Object {
 	switch {
 	case left.Type() == object.ARRAY_OBJ && index.Type() == object.INTEGER_OBJ:
 		return evalArrayIndexExpression(left, index)

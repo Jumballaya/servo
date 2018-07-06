@@ -41,6 +41,7 @@ None made so far
   * Add a standard library that can be imported into any file.
     - Standard lib files can be imported by itself (aka `import map from 'Array';` or `import 'Array'`) and without extension
     - Any other files have to be a relative path or absolute path to the file to import (aka `import func from './module.svo';` or `import './module.svo'`) and must have the file extension
+    - Once the import keyword is tested and working, remove the require function
   * Wrapper for Go's HTTP functions
     - Routing string parser
     - Route function

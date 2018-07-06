@@ -766,34 +766,6 @@ func TestParsingIndexExpressions(t *testing.T) {
 	}
 }
 
-func TestParsingDotIndexExpressions(t *testing.T) {
-	tests := []struct {
-		input         string
-		expectedLeft  string
-		expectedRight string
-	}{
-		{`hash.foo.bar.baz;`, "hash", "foo(.bar(.baz))"},
-		{"hash.foo;", "hash", "foo"},
-	}
-
-	for _, tt := range tests {
-		l := lexer.New(tt.input)
-		p := New(l)
-		program := p.ParseProgram()
-		checkParserErrors(t, p)
-
-		stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
-		indexExp, ok := stmt.Expression.(*ast.DotIndexExpression)
-		if !ok {
-			t.Fatalf("exp not *ast.DotIndexExpression. got=%T", stmt.Expression)
-		}
-
-		if !testDotIndexExpression(t, indexExp, tt.expectedLeft, tt.expectedRight) {
-			return
-		}
-	}
-}
-
 func TestParsingEmptyHashLiteral(t *testing.T) {
 	input := "{}"
 
@@ -1114,27 +1086,6 @@ func testBooleanLiteral(t *testing.T, exp ast.Expression, value bool) bool {
 	if bo.TokenLiteral() != fmt.Sprintf("%t", value) {
 		t.Errorf("bo.TokenLiteral not %t. got=%s",
 			value, bo.TokenLiteral())
-		return false
-	}
-
-	return true
-}
-
-func testDotIndexExpression(t *testing.T, exp ast.Expression, left, index string) bool {
-	ident, ok := exp.(*ast.DotIndexExpression)
-	if !ok {
-		t.Errorf("exp not *ast.DotIndexExpression. got=%T", exp)
-		return false
-	}
-
-	if ident.Left.String() != left {
-		t.Errorf("ident.Value not %s. got=%s", left, ident.Left.String())
-		return false
-	}
-
-	if ident.Index.String() != index {
-		t.Errorf("ident.TokenLiteral not %s. got=%s", index,
-			ident.Index.String())
 		return false
 	}
 

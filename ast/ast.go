@@ -318,24 +318,6 @@ func (ie *IndexExpression) String() string {
 	return out.String()
 }
 
-type DotIndexExpression struct {
-	Token token.Token
-	Left  Expression
-	Index Expression
-}
-
-func (de *DotIndexExpression) expressionNode()      {}
-func (de *DotIndexExpression) TokenLiteral() string { return de.Token.Literal }
-func (de *DotIndexExpression) String() string {
-	var out bytes.Buffer
-	out.WriteString(de.Left.String())
-	out.WriteString("(")
-	out.WriteString(".")
-	out.WriteString(de.Index.String())
-	out.WriteString(")")
-	return out.String()
-}
-
 type HashLiteral struct {
 	Token token.Token // '{' token
 	Pairs map[Expression]Expression

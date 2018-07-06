@@ -7,7 +7,8 @@ import (
 )
 
 func TestNextToken(t *testing.T) {
-	input := `let five = 5;
+	input := `
+let five = 5;
 let ten = 10;
 
 let add = fn(x, y) {
@@ -39,7 +40,6 @@ if (5 < 10) {
 5 <= 10;
 10 >= 5;
 10 % 5;
-foo.bar;
 `
 
 	tests := []struct {
@@ -147,10 +147,6 @@ foo.bar;
 		{token.INT, "10"},
 		{token.MODULO, "%"},
 		{token.INT, "5"},
-		{token.SEMICOLON, ";"},
-		{token.IDENT, "foo"},
-		{token.DOT, "."},
-		{token.IDENT, "bar"},
 		{token.SEMICOLON, ";"},
 		{token.EOF, ""},
 	}

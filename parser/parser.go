@@ -12,6 +12,7 @@ import (
 const (
 	_ int = iota
 	LOWEST
+	DOT         // foo.bar
 	EQUALS      // ==
 	LESSGREATER // > or <
 	SUM         // +
@@ -35,7 +36,7 @@ var precedences = map[token.TokenType]int{
 	token.MODULO:   PRODUCT,
 	token.LPAREN:   CALL,
 	token.LBRACKET: INDEX,
-	token.DOT:      INDEX,
+	token.DOT:      DOT,
 }
 
 type (
@@ -95,7 +96,6 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerInfix(token.GTE, p.parseInfixExpression)
 	p.registerInfix(token.LPAREN, p.parseCallExpression)
 	p.registerInfix(token.LBRACKET, p.parseIndexExpression)
-	p.registerInfix(token.DOT, p.parseDotIndexExpression)
 
 	return p
 }
@@ -399,15 +399,6 @@ func (p *Parser) parseIndexExpression(left ast.Expression) ast.Expression {
 	if !p.expectPeek(token.RBRACKET) {
 		return nil
 	}
-
-	return exp
-}
-
-func (p *Parser) parseDotIndexExpression(left ast.Expression) ast.Expression {
-	exp := &ast.DotIndexExpression{Token: p.curToken, Left: left}
-
-	p.nextToken()
-	exp.Index = p.parseExpression(LOWEST)
 
 	return exp
 }
