@@ -9,5 +9,3 @@ let reduce = fn(arr, initial, f) {
 
   iter(arr, initial)
 };
-
-log(reduce([1,2,3,4,5], 0, fn(x, y) { x + y }));
