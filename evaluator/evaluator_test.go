@@ -60,6 +60,10 @@ func TestEvalBooleanExpression(t *testing.T) {
 		{"(1 < 2) == false", false},
 		{"(1 > 2) == true", false},
 		{"(1 > 2) == false", true},
+		{"10 <= 5", false},
+		{"10 >= 100", false},
+		{"1000 >= 1000", true},
+		{"1000 <= 1000", true},
 	}
 
 	for _, tt := range tests {

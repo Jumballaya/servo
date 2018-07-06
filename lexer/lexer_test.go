@@ -27,15 +27,17 @@ if (5 < 10) {
 10 == 10;
 10 != 9;
 
-"foobar"
-"foo bar"
+"foobar";
+"foo bar";
 
 [1, 2];
 
-{"foo": "bar"}
+{"foo": "bar"};
 
 #This is a comment
 
+5 <= 10;
+10 >= 5;
 `
 
 	tests := []struct {
@@ -116,7 +118,9 @@ if (5 < 10) {
 		{token.INT, "9"},
 		{token.SEMICOLON, ";"},
 		{token.STRING, "foobar"},
+		{token.SEMICOLON, ";"},
 		{token.STRING, "foo bar"},
+		{token.SEMICOLON, ";"},
 		{token.LBRACKET, "["},
 		{token.INT, "1"},
 		{token.COMMA, ","},
@@ -128,7 +132,16 @@ if (5 < 10) {
 		{token.COLON, ":"},
 		{token.STRING, "bar"},
 		{token.RBRACE, "}"},
+		{token.SEMICOLON, ";"},
 		{token.COMMENT, "This is a comment"},
+		{token.INT, "5"},
+		{token.LTE, "<="},
+		{token.INT, "10"},
+		{token.SEMICOLON, ";"},
+		{token.INT, "10"},
+		{token.GTE, ">="},
+		{token.INT, "5"},
+		{token.SEMICOLON, ";"},
 		{token.EOF, ""},
 	}
 

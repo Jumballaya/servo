@@ -26,10 +26,13 @@ const (
 	BANG     = "!"
 	ASTERISK = "*"
 	SLASH    = "/"
+	MODULO   = "%"
 
-	LT = "<"
-	GT = ">"
-
+	// Logical Comparison
+	LT     = "<"
+	GT     = ">"
+	LTE    = "<="
+	GTE    = ">="
 	EQ     = "=="
 	NOT_EQ = "!="
 

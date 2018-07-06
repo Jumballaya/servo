@@ -32,8 +32,9 @@ None made so far
   * ~~Single quotes for strings~~
   * ~~String infix operators~~
   * Integer/Boolean infix operators
-    - \>=
-    - <=
+    - ~~\>=~~
+    - ~~<=~~
+    - %
   * Dot notation for hashes
   * ~~Require function for binding an evaluated file to an identifier~~
     - Still needs tests
