@@ -30,9 +30,7 @@ None made so far
 
   * ~~Comments using #~~
   * ~~Single quotes for strings~~
-  * String infix operators
-    - ==
-    - !=
+  * ~~String infix operators~~
   * Integer/Boolean infix operators
     - \>=
     - <=

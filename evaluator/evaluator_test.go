@@ -330,30 +330,57 @@ addTwo(2);`
 }
 
 func TestStringLiteral(t *testing.T) {
-	input := `"Hello World!"`
-
-	evaluated := testEval(input)
-	str, ok := evaluated.(*object.String)
-	if !ok {
-		t.Fatalf("object is not String. got=%T (%+v)", evaluated, evaluated)
+	tests := []struct {
+		input    string
+		expected string
+	}{
+		{`"Hello World!"`, "Hello World!"},
+		{`'Hello World!'`, "Hello World!"},
 	}
 
-	if str.Value != "Hello World!" {
-		t.Errorf("String has wrong value. got=%q", str.Value)
+	for _, tt := range tests {
+		evaluated := testEval(tt.input)
+		str, ok := evaluated.(*object.String)
+		if !ok {
+			t.Fatalf("object is not String. got=%T (%+v)", evaluated, evaluated)
+		}
+
+		if str.Value != tt.expected {
+			t.Errorf("String has wrong value. got=%q", str.Value)
+		}
 	}
 }
 
-func TestStringConcatenation(t *testing.T) {
-	input := `"Hello" + " " + "World!"`
-
-	evaluated := testEval(input)
-	str, ok := evaluated.(*object.String)
-	if !ok {
-		t.Fatalf("object is not String. got=%T (%+v)", evaluated, evaluated)
+func TestStringInfixOperations(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected interface{}
+	}{
+		{`"Hello" + " " + "World!"`, "Hello World!"},
+		{`"Hello World!" == "Hello World!"`, true},
+		{`"Hello World!" != "Hello World!"`, false},
 	}
 
-	if str.Value != "Hello World!" {
-		t.Errorf("String has wrong value. got=%q", str.Value)
+	for _, tt := range tests {
+		evaluated := testEval(tt.input)
+		switch tt.expected.(type) {
+		case string:
+			str, ok := evaluated.(*object.String)
+			if !ok {
+				t.Fatalf("object is not String. got=%T (%+v)", evaluated, evaluated)
+			}
+			if str.Value != tt.expected {
+				t.Errorf("String has wrong value. got=%q", str.Value)
+			}
+		case bool:
+			b, ok := evaluated.(*object.Boolean)
+			if !ok {
+				t.Fatalf("object is not Boolean. got=%T (%+v)", evaluated, evaluated)
+			}
+			if b.Value != tt.expected {
+				t.Errorf("Boolean has wrong value. got=%t", b.Value)
+			}
+		}
 	}
 }
 
