@@ -26,10 +26,16 @@ if (5 < 10) {
 
 10 == 10;
 10 != 9;
+
 "foobar"
 "foo bar"
+
 [1, 2];
+
 {"foo": "bar"}
+
+#This is a comment
+
 `
 
 	tests := []struct {
@@ -122,6 +128,7 @@ if (5 < 10) {
 		{token.COLON, ":"},
 		{token.STRING, "bar"},
 		{token.RBRACE, "}"},
+		{token.COMMENT, "This is a comment"},
 		{token.EOF, ""},
 	}
 

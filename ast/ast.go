@@ -268,6 +268,15 @@ func (sl *StringLiteral) expressionNode()      {}
 func (sl *StringLiteral) TokenLiteral() string { return sl.Token.Literal }
 func (sl *StringLiteral) String() string       { return sl.Token.Literal }
 
+type CommentLiteral struct {
+	Token token.Token
+	Value string
+}
+
+func (cl *CommentLiteral) expressionNode()      {}
+func (cl *CommentLiteral) TokenLiteral() string { return cl.Token.Literal }
+func (cl *CommentLiteral) String() string       { return cl.Token.Literal }
+
 type ArrayLiteral struct {
 	Token    token.Token // '[' token
 	Elements []Expression
