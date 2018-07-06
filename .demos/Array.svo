@@ -1,3 +1,12 @@
+###
+##
+#    ARRAYS
+##
+###
+
+
+# Map
+# Cycle through all of the items in the array and apply the function
 let map = fn(arr, f) {
   let iter = fn(arr, acc) {
     if (len(arr) == 0) {
@@ -10,6 +19,9 @@ let map = fn(arr, f) {
   iter(arr, [])
 };
 
+# Reduce
+# Cycle through the array and apply the function with the array item as well as an accumulator
+# that is created from the returned value from the last time the function was called in the loop
 let reduce = fn(arr, initial, f) {
   let iter = fn(arr, result) {
     if (len(arr) == 0) {
@@ -22,6 +34,9 @@ let reduce = fn(arr, initial, f) {
   iter(arr, initial)
 };
 
+# Filter
+# Cycle through the array and apply the function. This only keep the items that make the function
+# return true
 let filter = fn(arr, f) {
   let iter = fn(arr, acc) {
     if (len(arr) == 0) {
@@ -38,6 +53,7 @@ let filter = fn(arr, f) {
   iter(arr, [])
 };
 
+# Array hash
 let Array = {
   "map": map,
   "reduce": reduce,
