@@ -68,6 +68,9 @@ func (l *Lexer) NextToken() token.Token {
 	case '"':
 		tok.Type = token.STRING
 		tok.Literal = l.readString()
+	case '\'':
+		tok.Type = token.STRING
+		tok.Literal = l.readString()
 	case '[':
 		tok = newToken(token.LBRACKET, l.ch)
 	case ']':
@@ -127,7 +130,7 @@ func (l *Lexer) readString() string {
 	position := l.position + 1
 	for {
 		l.readChar()
-		if l.ch == '"' || l.ch == '\n' || l.ch == 0 {
+		if l.ch == '"' || l.ch == '\'' || l.ch == '\n' || l.ch == 0 {
 			break
 		}
 	}
