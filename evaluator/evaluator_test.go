@@ -615,6 +615,37 @@ func TestHashIndexExpressions(t *testing.T) {
 		}
 	}
 }
+
+func TestDotIndexExpressions(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected interface{}
+	}{
+		{
+			`let hash = {"foo": 5}; hash.foo;`,
+			5,
+		},
+		{
+			`let hash = {"foo": 5}; hash.bar;`,
+			nil,
+		},
+		{
+			`{}.foo`,
+			nil,
+		},
+	}
+
+	for _, tt := range tests {
+		evaluated := testEval(tt.input)
+		integer, ok := tt.expected.(int)
+		if ok {
+			testIntegerObject(t, evaluated, int64(integer))
+		} else {
+			testNullObject(t, evaluated)
+		}
+	}
+}
+
 func testEval(input string) object.Object {
 	l := lexer.New(input)
 	p := parser.New(l)
