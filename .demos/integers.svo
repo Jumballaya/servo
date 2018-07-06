@@ -1,2 +1,20 @@
-let a = 10 / 5 + (7 - 20) + 100 * 2;
-log(a);
+# Integers Examples
+
+### Basic operators
+log(5 + 5);
+log(10 / 2);
+log(10 * 4);
+log(15 - 3);
+log(15 % 4);
+log((9 + 3) / (6 + 2))
+
+### Order of operations
+log(5 + 5 * 5 == 5 + (5 * 5))
+log(5 - 5 / 5 == 5 - (5 / 5))
+log(5 + 5 % 2 == 5 + (5 % 2))
+
+### Comparison operators
+log(5 > 10)
+log(10 < 2)
+log(5 >= 5)
+log(123 <= 200)

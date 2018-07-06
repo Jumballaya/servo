@@ -1,1 +1,9 @@
-log("Hello " + "World!")
+# Strings Examples
+
+### Strings are preceded by a single or double quote
+let message = "Hello World"
+let name = "John"
+log(message, name)
+
+### Strings can be concatontated with the + operator
+log(message + "! My name is " + name)

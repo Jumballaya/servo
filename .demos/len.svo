@@ -1,3 +1,0 @@
-let word = "Hello World";
-let arr = [1,2,3]
-len(word) + len(arr);

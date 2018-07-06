@@ -1,0 +1,28 @@
+# Function Examples
+
+### Functions are declared with the fn keyword
+let add = fn(x, y) { x + y };
+
+### Functions are first-class objects in servo
+let anotherAdd = add;
+
+### Functions also have closure
+let closure = fn(x) {
+  fn(y) {
+    x + y
+  }
+}
+
+let addTwo = closure(2);
+log(addTwo(4))
+log("")
+
+### Recursion is allowed
+let counter = fn(time) {
+  log(time)
+  if (time > 0) {
+    counter(time - 1)
+  }
+}
+
+counter(15);
