@@ -32,11 +32,11 @@ None made so far
   * ~~Single quotes for strings~~
   * ~~String infix operators~~
   * ~~Integer/Boolean infix operators~~
-  * Dot notation for hashes
   * ~~Require function for binding an evaluated file to an identifier~~
     - Still needs tests
-  * Fix comment parsing so quotes and special characters work
-  * Fix string parsing to include the single quote as well as escape the special characters like \n \t etc.
+  * ~~Fix comment parsing so quotes and special characters work~~
+  * ~~Fix string parsing to include the single quote~~
+  * Fix string parsing to escape the special characters like \n \t etc.
   * Add import keyword to import specific identifier objects from a file
   * Add a standard library that can be imported into any file.
     - Standard lib files can be imported by itself (aka `import map from 'Array';` or `import 'Array'`) and without extension
@@ -51,3 +51,4 @@ None made so far
   * JSON support
   * Templates
   * Documentation and examples
+  * Dot notation for hashes

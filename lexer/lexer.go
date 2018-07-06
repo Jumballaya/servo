@@ -83,10 +83,10 @@ func (l *Lexer) NextToken() token.Token {
 		tok = newToken(token.RBRACE, l.ch)
 	case '"':
 		tok.Type = token.STRING
-		tok.Literal = l.readString()
+		tok.Literal = l.readString('"')
 	case '\'':
 		tok.Type = token.STRING
-		tok.Literal = l.readString()
+		tok.Literal = l.readString('\'')
 	case '[':
 		tok = newToken(token.LBRACKET, l.ch)
 	case ']':
@@ -98,7 +98,7 @@ func (l *Lexer) NextToken() token.Token {
 		tok.Type = token.EOF
 	case '#':
 		tok.Type = token.COMMENT
-		tok.Literal = l.readString()
+		tok.Literal = l.readString('\n')
 	default:
 		if isLetter(l.ch) {
 			tok.Literal = l.readIdentifier()
@@ -142,11 +142,11 @@ func (l *Lexer) readNumber() string {
 	return l.input[position:l.position]
 }
 
-func (l *Lexer) readString() string {
+func (l *Lexer) readString(initial byte) string {
 	position := l.position + 1
 	for {
 		l.readChar()
-		if l.ch == '"' || l.ch == '\'' || l.ch == '\n' || l.ch == 0 {
+		if l.ch == initial || l.ch == 0 {
 			break
 		}
 	}
@@ -171,7 +171,7 @@ func newToken(tokenType token.TokenType, ch byte) token.Token {
 }
 
 func isLetter(ch byte) bool {
-	return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_'
+	return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_' || ch == '\''
 }
 
 func isDigit(ch byte) bool {

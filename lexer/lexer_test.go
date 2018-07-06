@@ -36,6 +36,7 @@ if (5 < 10) {
 {"foo": "bar"};
 
 #This is a comment
+#'This is a comment with quotes"
 
 5 <= 10;
 10 >= 5;
@@ -136,6 +137,7 @@ if (5 < 10) {
 		{token.RBRACE, "}"},
 		{token.SEMICOLON, ";"},
 		{token.COMMENT, "This is a comment"},
+		{token.COMMENT, `'This is a comment with quotes"`},
 		{token.INT, "5"},
 		{token.LTE, "<="},
 		{token.INT, "10"},

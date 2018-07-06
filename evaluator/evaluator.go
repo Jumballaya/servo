@@ -315,7 +315,6 @@ func evalIfExpression(ie *ast.IfExpression, env *object.Environment) object.Obje
 }
 
 func evalIdentifier(node *ast.Identifier, env *object.Environment) object.Object {
-	fmt.Println(node)
 	if val, ok := env.Get(node.Value); ok {
 		return val
 	}
