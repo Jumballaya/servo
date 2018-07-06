@@ -38,6 +38,7 @@ if (5 < 10) {
 
 5 <= 10;
 10 >= 5;
+10 % 5;
 `
 
 	tests := []struct {
@@ -140,6 +141,10 @@ if (5 < 10) {
 		{token.SEMICOLON, ";"},
 		{token.INT, "10"},
 		{token.GTE, ">="},
+		{token.INT, "5"},
+		{token.SEMICOLON, ";"},
+		{token.INT, "10"},
+		{token.MODULO, "%"},
 		{token.INT, "5"},
 		{token.SEMICOLON, ";"},
 		{token.EOF, ""},
