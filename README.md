@@ -28,16 +28,18 @@ None made so far
 
 ## TODO List
 
-  1. Comments: # and //
+  1. ~~Comments using #~~
   2. Single quotes for strings
   3. Dot notation for hashes
-  4. Require function for binding an evaluated file to an identifier
-  5. Wrappr for Go's HTTP functions
+  4. ~~Require function for binding an evaluated file to an identifier~~
+    - Still needs tests
+  5. Add import keyword to import specific identifier objects from a file
+  6. Wrapper for Go's HTTP functions
     * Routing string parser
     * Route function
     * Route middleware
     * Static files
     * Forms
-  6. JSON support
-  7. Templates
-  8. Documentation and examples
+  7. JSON support
+  8. Templates
+  9. Documentation and examples
