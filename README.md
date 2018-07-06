@@ -35,7 +35,12 @@ None made so far
   * Dot notation for hashes
   * ~~Require function for binding an evaluated file to an identifier~~
     - Still needs tests
+  * Fix comment parsing so quotes and special characters work
+  * Fix string parsing to include the single quote as well as escape the special characters like \n \t etc.
   * Add import keyword to import specific identifier objects from a file
+  * Add a standard library that can be imported into any file.
+    - Standard lib files can be imported by itself (aka `import map from 'Array';` or `import 'Array'`) and without extension
+    - Any other files have to be a relative path or absolute path to the file to import (aka `import func from './module.svo';` or `import './module.svo'`) and must have the file extension
   * Wrapper for Go's HTTP functions
     - Routing string parser
     - Route function
