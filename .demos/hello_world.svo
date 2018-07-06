@@ -1,0 +1,5 @@
+let greet = fn(name) {
+  "Hello " + name;
+};
+
+greet("World!");

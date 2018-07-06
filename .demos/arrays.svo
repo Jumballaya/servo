@@ -1,0 +1,6 @@
+let double = fn(x) { 2 * x };
+
+let arr = [1, 2, 3, double(4)];
+let array = [6, 5, 4, double(arr[0]), double(len(arr))];
+
+log(array);
