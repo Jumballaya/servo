@@ -39,6 +39,7 @@ if (5 < 10) {
 5 <= 10;
 10 >= 5;
 10 % 5;
+foo.bar;
 `
 
 	tests := []struct {
@@ -146,6 +147,10 @@ if (5 < 10) {
 		{token.INT, "10"},
 		{token.MODULO, "%"},
 		{token.INT, "5"},
+		{token.SEMICOLON, ";"},
+		{token.IDENT, "foo"},
+		{token.DOT, "."},
+		{token.IDENT, "bar"},
 		{token.SEMICOLON, ";"},
 		{token.EOF, ""},
 	}
