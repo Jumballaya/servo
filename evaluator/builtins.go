@@ -2,6 +2,9 @@ package evaluator
 
 import (
 	"fmt"
+	"io"
+	"log"
+	"net/http"
 	"strings"
 
 	"github.com/jumballaya/servo/object"
@@ -126,6 +129,17 @@ var builtins = map[string]*object.Builtin{
 			for _, arg := range args {
 				fmt.Println(arg.Inspect())
 			}
+			return NULL
+		},
+	},
+	"server": &object.Builtin{
+		Fn: func(args ...object.Object) object.Object {
+			handler := func(w http.ResponseWriter, r *http.Request) {
+				io.WriteString(w, "<h1>Hello World</h1>")
+			}
+
+			http.HandleFunc("/", handler)
+			log.Fatal(http.ListenAndServe(":8080", nil))
 			return NULL
 		},
 	},
