@@ -3,8 +3,11 @@ package evaluator
 import (
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/jumballaya/servo/object"
@@ -141,6 +144,35 @@ var builtins = map[string]*object.Builtin{
 			http.HandleFunc("/", handler)
 			log.Fatal(http.ListenAndServe(":8080", nil))
 			return NULL
+		},
+	},
+	"file": &object.Builtin{
+		Fn: func(args ...object.Object) object.Object {
+			if len(args) != 1 {
+				return newError("wrong number of arguments. Got: %d. Want: 1", len(args))
+			}
+
+			if args[0].Type() != object.STRING_OBJ {
+				return newError("argument to `file` must be STRING, got %s", args[0].Type())
+			}
+
+			requiredFile := args[0].Inspect()
+			currentFile := os.Args[1]
+			currentDir := "./" + strings.Join(strings.Split(currentFile, "/")[:1], "/")
+
+			dir, err := filepath.Abs(currentDir + "/" + requiredFile)
+			if err != nil {
+				fmt.Println(err.Error())
+				return newError(err.Error())
+			}
+
+			file, err := ioutil.ReadFile(dir)
+			if err != nil {
+				fmt.Println(err.Error())
+				return newError(err.Error())
+			}
+
+			return &object.String{Value: string(file[:])}
 		},
 	},
 }
