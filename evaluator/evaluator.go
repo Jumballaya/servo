@@ -25,6 +25,10 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 	case *ast.ExpressionStatement:
 		return Eval(node.Expression, env)
 
+	// Import Expression
+	case *ast.ImportExpression:
+		return evalImportExpression(node.Value, env)
+
 	// Integer
 	case *ast.IntegerLiteral:
 		return &object.Integer{Value: node.Value}
@@ -413,6 +417,34 @@ func evalHashLiteral(node *ast.HashLiteral, env *object.Environment) object.Obje
 	}
 
 	return &object.Hash{Pairs: pairs}
+}
+
+func evalImportExpression(module string, env *object.Environment) object.Object {
+	split := strings.Split(module, ":")
+	mod := split[0]
+	obj := split[1]
+
+	fn, ok := env.Get(mod)
+	if !ok {
+		return newError("improper import, function key not found")
+	}
+
+	hash, ok := fn.(*object.Hash)
+	if !ok {
+		return newError("Must import off of an exported hash")
+	}
+
+	key := (&object.String{Value: obj}).HashKey()
+
+	found := hash.Pairs[key].Value
+	_, ok = found.(*object.Null)
+	if ok {
+		env.Set(obj, NULL)
+		return NULL
+	}
+
+	env.Set(obj, found)
+	return NULL
 }
 
 func isTruthy(obj object.Object) bool {

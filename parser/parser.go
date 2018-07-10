@@ -82,6 +82,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.LBRACKET, p.parseArrayLiteral)
 	p.registerPrefix(token.LBRACE, p.parseHashLiteral)
 	p.registerPrefix(token.COMMENT, p.parseComment)
+	p.registerPrefix(token.IMPORT, p.parseImport)
 
 	p.registerInfix(token.PLUS, p.parseInfixExpression)
 	p.registerInfix(token.MINUS, p.parseInfixExpression)
@@ -434,6 +435,10 @@ func (p *Parser) parseHashLiteral() ast.Expression {
 
 func (p *Parser) parseComment() ast.Expression {
 	return &ast.CommentLiteral{Token: p.curToken, Value: p.curToken.Literal}
+}
+
+func (p *Parser) parseImport() ast.Expression {
+	return &ast.ImportExpression{Token: p.curToken, Value: p.curToken.Literal}
 }
 
 func (p *Parser) curTokenIs(t token.TokenType) bool {
