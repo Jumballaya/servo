@@ -40,6 +40,7 @@ None made so far
   * ~~JSON support~~
   * Add import keyword to import specific identifier objects from a file
   * Add a standard library that can be imported into any file.
+    - ~~Basic support~~
     - Standard lib files can be imported by itself (aka `import map from 'Array';` or `import 'Array'`) and without extension
     - Any other files have to be a relative path or absolute path to the file to import (aka `import func from './module.svo';` or `import './module.svo'`) and must have the file extension
     - Once the import keyword is tested and working, remove the require function
