@@ -39,6 +39,9 @@ None made so far
   * ~~Fix string parsing to escape the special characters like \n \t etc.~~
   * ~~JSON support~~
   * Add import keyword to import specific identifier objects from a file
+    - ~~basic implementation~~
+    - Fix for `import 'Array';` style
+    - Pull in from files as well as what is already in the scope
   * Add a standard library that can be imported into any file.
     - ~~Basic support~~
     - Standard lib files can be imported by itself (aka `import map from 'Array';` or `import 'Array'`) and without extension

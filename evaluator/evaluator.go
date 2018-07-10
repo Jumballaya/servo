@@ -424,6 +424,10 @@ func evalImportExpression(module string, env *object.Environment) object.Object 
 	mod := split[0]
 	obj := split[1]
 
+	// Open the module's file
+	// Evaluate it
+	// Rip out the identifier that is being imported
+
 	fn, ok := env.Get(mod)
 	if !ok {
 		return newError("improper import, function key not found")
