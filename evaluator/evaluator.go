@@ -325,7 +325,7 @@ func evalIdentifier(node *ast.Identifier, env *object.Environment) object.Object
 	}
 
 	if node.Value == "json" {
-		return evalJsonExpression()
+		return evalJSONExpression()
 	}
 
 	if builtin, ok := builtins[node.Value]; ok {

@@ -8,7 +8,7 @@ import (
 	"github.com/jumballaya/servo/parser"
 )
 
-func evalJsonExpression() object.Object {
+func evalJSONExpression() object.Object {
 	return &object.Builtin{
 		Fn: func(args ...object.Object) object.Object {
 			if len(args) != 1 {
