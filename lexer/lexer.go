@@ -101,6 +101,11 @@ func (l *Lexer) NextToken() token.Token {
 		tok.Literal = l.readString('\n')
 	default:
 		if isLetter(l.ch) {
+			if l.ch == 'i' && l.peekChar() == 'm' {
+				tok = l.readImport()
+				l.readChar()
+				return tok
+			}
 			tok.Literal = l.readIdentifier()
 			tok.Type = token.LookupIdent(tok.Literal)
 			return tok
@@ -144,13 +149,59 @@ func (l *Lexer) readNumber() string {
 
 func (l *Lexer) readString(initial byte) string {
 	position := l.position + 1
-	for {
-		l.readChar()
-		if l.ch == initial || l.ch == 0 {
-			break
+	if initial == '\'' || initial == '"' {
+		for {
+			l.readChar()
+			if l.ch == '\'' || l.ch == '"' || l.ch == 0 {
+				break
+			}
 		}
+		return l.input[position:l.position]
+	} else {
+		for {
+			l.readChar()
+			if l.ch == initial || l.ch == 0 {
+				break
+			}
+		}
+		return l.input[position:l.position]
 	}
-	return l.input[position:l.position]
+}
+
+func (l *Lexer) readImport() token.Token {
+	if l.peekChar() != 'f' {
+
+	}
+	stmt := l.readString(' ')
+	if stmt != "mport" {
+		illegal := newToken(token.ILLEGAL, l.ch)
+		return illegal
+	}
+
+	// Case: import map from 'Array';
+	if l.ch != '\'' && l.ch != '"' {
+		module := l.readString(' ')
+		fromStmt := l.readString(' ')
+
+		if fromStmt != "from" {
+			illegal := newToken(token.ILLEGAL, l.ch)
+			return illegal
+		}
+
+		l.skipWhiteSpace()
+
+		if l.ch != '\'' && l.ch != '"' {
+			illegal := newToken(token.ILLEGAL, l.ch)
+			return illegal
+		}
+
+		object := l.readString('\'')
+
+		return token.Token{Type: token.IMPORT, Literal: object + ":" + module}
+	}
+
+	illegal := newToken(token.ILLEGAL, l.ch)
+	return illegal
 }
 
 func (l *Lexer) skipWhiteSpace() {
