@@ -24,7 +24,12 @@ func evalRequireExpression() object.Object {
 			}
 
 			requiredFile := args[0].Inspect()
-			currentFile := os.Args[1]
+			var currentFile string
+			if len(os.Args) < 2 {
+				currentFile = os.Args[0]
+			} else {
+				currentFile = os.Args[1]
+			}
 			currentDir := "./" + strings.Join(strings.Split(currentFile, "/")[:1], "/")
 
 			dir, err := filepath.Abs(currentDir + "/" + requiredFile)

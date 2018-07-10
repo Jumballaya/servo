@@ -1,0 +1,18 @@
+###
+##
+#   STRINGS
+##
+###
+
+# SPLIT
+## Cycle through the string one character at a time and chunk it based on the delimeter
+let split = fn(string, delimeter) {
+  string;
+}
+
+
+
+## String
+let String = {
+  "split": split,
+};
