@@ -31,10 +31,11 @@ if (5 < 10) {
 
 "foobar";
 "foo bar";
+'{"foo": "bar"}';
 
 [1, 2];
 
-{"foo": "bar"};
+let x = {"foo": "bar"};
 
 #This is a comment
 #'This is a comment with quotes"
@@ -127,12 +128,17 @@ if (5 < 10) {
 		{token.SEMICOLON, ";"},
 		{token.STRING, "foo bar"},
 		{token.SEMICOLON, ";"},
+		{token.STRING, `{"foo": "bar"}`},
+		{token.SEMICOLON, ";"},
 		{token.LBRACKET, "["},
 		{token.INT, "1"},
 		{token.COMMA, ","},
 		{token.INT, "2"},
 		{token.RBRACKET, "]"},
 		{token.SEMICOLON, ";"},
+		{token.LET, "let"},
+		{token.IDENT, "x"},
+		{token.ASSIGN, "="},
 		{token.LBRACE, "{"},
 		{token.STRING, "foo"},
 		{token.COLON, ":"},

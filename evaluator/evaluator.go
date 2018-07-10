@@ -329,6 +329,7 @@ func evalIdentifier(node *ast.Identifier, env *object.Environment) object.Object
 	}
 
 	if node.Value == "json" {
+		fmt.Println(node)
 		return evalJSONExpression()
 	}
 

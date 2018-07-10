@@ -152,7 +152,7 @@ func (l *Lexer) readString(initial byte) string {
 	if initial == '\'' || initial == '"' {
 		for {
 			l.readChar()
-			if l.ch == '\'' || l.ch == '"' || l.ch == 0 {
+			if l.ch == initial || l.ch == 0 {
 				break
 			}
 		}
@@ -222,7 +222,11 @@ func newToken(tokenType token.TokenType, ch byte) token.Token {
 }
 
 func isLetter(ch byte) bool {
-	return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_' || ch == '\''
+	aZ := ('a' <= ch && ch <= 'z') || ('A' <= ch && ch <= 'Z')
+	special := (ch == '_') || ch == '-' || (ch == '\'') || (ch == '"')
+	index := (ch == '{') || (ch == '[') || (ch == '}') || (ch == ']')
+
+	return aZ || special || index
 }
 
 func isDigit(ch byte) bool {
