@@ -2,6 +2,7 @@ package evaluator
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/jumballaya/servo/ast"
 	"github.com/jumballaya/servo/object"
@@ -34,7 +35,7 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 
 	// String
 	case *ast.StringLiteral:
-		return &object.String{Value: node.Value}
+		return evalStringLiteral(node, env)
 
 	// Array
 	case *ast.ArrayLiteral:
@@ -323,6 +324,10 @@ func evalIdentifier(node *ast.Identifier, env *object.Environment) object.Object
 		return evalRequireExpression()
 	}
 
+	if node.Value == "json" {
+		return evalJsonExpression()
+	}
+
 	if builtin, ok := builtins[node.Value]; ok {
 		return builtin
 	}
@@ -335,6 +340,14 @@ func nativeBooleanToBooleanObject(val bool) *object.Boolean {
 		return TRUE
 	}
 	return FALSE
+}
+
+func evalStringLiteral(node *ast.StringLiteral, env *object.Environment) object.Object {
+	val := node.Value
+	val = strings.Replace(val, "\\n", "\n", -1)
+	val = strings.Replace(val, "\\t", "\t", -1)
+	val = strings.Replace(val, "\\r", "\r", -1)
+	return &object.String{Value: val}
 }
 
 func evalIndexExpression(left, index object.Object) object.Object {

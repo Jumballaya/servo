@@ -36,7 +36,7 @@ None made so far
     - Still needs tests
   * ~~Fix comment parsing so quotes and special characters work~~
   * ~~Fix string parsing to include the single quote~~
-  * Fix string parsing to escape the special characters like \n \t etc.
+  * ~~Fix string parsing to escape the special characters like \n \t etc.~~
   * Add import keyword to import specific identifier objects from a file
   * Add a standard library that can be imported into any file.
     - Standard lib files can be imported by itself (aka `import map from 'Array';` or `import 'Array'`) and without extension
