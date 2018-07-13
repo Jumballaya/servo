@@ -19,7 +19,7 @@ type History struct {
 }
 
 func NewHistory() *History {
-	return &History{Current: 0, History: []string{}}
+	return &History{Current: 0, History: []string{""}}
 }
 
 func (h *History) Back() {
@@ -59,7 +59,7 @@ func (h *History) Insert(command string) {
 func Start(in io.Reader, out io.Writer) {
 	scanner := bufio.NewScanner(in)
 	env := stdlib.NewEnvironmentWithLib()
-	history := NewHistory()
+	//history := NewHistory()
 
 	for {
 		fmt.Printf(PROMPT)
@@ -69,7 +69,7 @@ func Start(in io.Reader, out io.Writer) {
 		}
 
 		line := scanner.Text()
-		history.Insert(line)
+		//history.Insert(line)
 
 		l := lexer.New(line)
 		p := parser.New(l)
