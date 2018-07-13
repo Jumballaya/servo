@@ -28,3 +28,11 @@ func (e *Environment) Set(name string, val Object) Object {
 	e.store[name] = val
 	return val
 }
+
+func (e *Environment) List() []string {
+	list := []string{}
+	for name, _ := range e.store {
+		list = append(list, name)
+	}
+	return list
+}

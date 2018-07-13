@@ -2,6 +2,8 @@ package evaluator
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/jumballaya/servo/ast"
@@ -324,10 +326,6 @@ func evalIdentifier(node *ast.Identifier, env *object.Environment) object.Object
 		return val
 	}
 
-	if node.Value == "require" {
-		return evalRequireExpression()
-	}
-
 	if node.Value == "json" {
 		return evalJSONExpression()
 	}
@@ -428,26 +426,49 @@ func evalImportExpression(module string, env *object.Environment) object.Object 
 	// Evaluate it
 	// Rip out the identifier that is being imported
 
-	fn, ok := env.Get(mod)
-	if !ok {
-		return newError("improper import, function key not found")
-	}
+	// Comes from a file
+	if strings.HasPrefix(mod, "./") {
+		var currentFile string
+		if len(os.Args) < 2 {
+			currentFile = os.Args[0]
+		} else {
+			currentFile = os.Args[1]
+		}
+		currentDir := "./" + strings.Join(strings.Split(currentFile, "/")[:1], "/")
 
-	hash, ok := fn.(*object.Hash)
-	if !ok {
-		return newError("Must import off of an exported hash")
-	}
+		dir, err := filepath.Abs(currentDir + "/" + mod)
+		if err != nil {
+			fmt.Println(err.Error())
+			return newError(err.Error())
+		}
+		pulled := GetObjectFromFile(dir, obj)
+		env.Set(obj, pulled)
+		return NULL
+		// Comes from the standard lib
+	} else {
+		fn, ok := env.Get(mod)
+		if !ok {
+			return newError("improper import, function key not found")
+		}
 
-	key := (&object.String{Value: obj}).HashKey()
+		hash, ok := fn.(*object.Hash)
+		if !ok {
+			return newError("Must import off of an exported hash")
+		}
 
-	found := hash.Pairs[key].Value
-	_, ok = found.(*object.Null)
-	if ok {
-		env.Set(obj, NULL)
+		key := (&object.String{Value: obj}).HashKey()
+
+		found := hash.Pairs[key].Value
+		_, ok = found.(*object.Null)
+		if ok {
+			env.Set(obj, NULL)
+			return NULL
+		}
+
+		env.Set(obj, found)
 		return NULL
 	}
 
-	env.Set(obj, found)
 	return NULL
 }
 

@@ -1,0 +1,8 @@
+import nums from './arrays.svo';
+import add from './integers.svo';
+import message from './strings.svo'
+import map from 'Array';
+
+
+log(map(nums, add))
+log(message)
