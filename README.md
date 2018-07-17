@@ -40,13 +40,22 @@ None made so far
   * ~~JSON support~~
   * Add import keyword to import specific identifier objects from a file
     - ~~basic implementation~~
-    - Fix for `import 'Array';` style
     - Pull in from files as well as what is already in the scope
+    - Come up with solution for library files as well as importing files
   * Add a standard library that can be imported into any file.
     - ~~Basic support~~
-    - Standard lib files can be imported by itself (aka `import map from 'Array';` or `import 'Array'`) and without extension
-    - Any other files have to be a relative path or absolute path to the file to import (aka `import func from './module.svo';` or `import './module.svo'`) and must have the file extension
-    - Once the import keyword is tested and working, remove the require function
+    - Standard lib files can be imported by itself (aka `import map from 'Array';`) and without extension
+    - Any other files have to be a relative path or absolute path to the file to import (aka `import func from './module.svo';`) and must have the file extension
+  * Implement bytes
+  * Byte operators >>, <<, |, &, &^
+  * Implement floats
+  * Rewrite lexer/parser to use runes
+  * Automatic semicolon insertion
+  * Increment/Decremnt by operators += , -= , \*= , \=
+  * Power operator ^
+  * Multiline Comments /\* \*/
+  * String escaping e.g. `\\b` or `"\"hello\""`
+  * Hex digits e.g. `0xfff`
   * Wrapper for Go's HTTP functions
     - Routing string parser
     - Route function
