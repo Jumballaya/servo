@@ -42,10 +42,13 @@ None made so far
     - ~~basic implementation~~
     - Pull in from files as well as what is already in the scope
     - Come up with solution for library files as well as importing files
+  * Add simple classes with fields and methods
+    - Dot notation `foo.bar`
   * Add a standard library that can be imported into any file.
     - ~~Basic support~~
     - Standard lib files can be imported by itself (aka `import map from 'Array';`) and without extension
     - Any other files have to be a relative path or absolute path to the file to import (aka `import func from './module.svo';`) and must have the file extension
+  * Get null working
   * Implement bytes
   * Byte operators >>, <<, |, &, &^
   * Implement floats
@@ -66,3 +69,7 @@ None made so far
   * Documentation and examples
   * Dot notation for hashes
   * Add line and column location to tokens (for better debugging)
+  * Add for/while loops
+  * Add try/catch
+  * Add `import './file.svo' as file` syntax to import
+  * Add `import func from './example.svo' as function` syntax to import
