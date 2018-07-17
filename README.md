@@ -65,3 +65,4 @@ None made so far
   * Templates
   * Documentation and examples
   * Dot notation for hashes
+  * Add line and column location to tokens (for better debugging)

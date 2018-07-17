@@ -27,6 +27,12 @@ const (
 	ASTERISK = "*"
 	SLASH    = "/"
 	MODULO   = "%"
+	CARROT   = "^"
+
+	PLUSASSIGN     = "+="
+	MINUSASSIGN    = "-="
+	ASTERISKASSIGN = "*="
+	SLASHASSIGN    = "/="
 
 	// Logical Comparison
 	LT     = "<"
@@ -36,10 +42,18 @@ const (
 	EQ     = "=="
 	NOT_EQ = "!="
 
+	// Bitwise operators
+	BITWISEOR     = "|"
+	BITWISEAND    = "&"
+	BITWISEANDNOT = "&^"
+	SHIFTLEFT     = "<<"
+	SHIFTRIGHT    = ">>"
+
 	// Delimiters
 	COMMA     = ","
 	SEMICOLON = ";"
 	COLON     = ":"
+	QMARK     = "?"
 	DOT       = "."
 
 	LPAREN   = "("
