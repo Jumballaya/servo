@@ -101,7 +101,7 @@ func (l *Lexer) NextToken() token.Token {
 		tok.Literal = l.readString('\n')
 	default:
 		if isLetter(l.ch) {
-			if l.ch == 'i' && l.peekChar() == 'm' {
+			if l.isImport() {
 				tok = l.readImport()
 				l.readChar()
 				return tok
@@ -169,9 +169,6 @@ func (l *Lexer) readString(initial byte) string {
 }
 
 func (l *Lexer) readImport() token.Token {
-	if l.peekChar() != 'f' {
-
-	}
 	stmt := l.readString(' ')
 	if stmt != "mport" {
 		illegal := newToken(token.ILLEGAL, l.ch)
@@ -215,6 +212,30 @@ func (l *Lexer) peekChar() byte {
 		return 0
 	}
 	return l.input[l.readPosition]
+}
+
+func (l *Lexer) isImport() bool {
+	pos := l.position
+	rPos := l.readPosition
+	ch := l.ch
+	letters := []byte{'i', 'm', 'p', 'o', 'r', 't'}
+	res := true
+
+	for _, letter := range letters {
+		if l.ch != letter {
+			res = false
+		}
+		l.readChar()
+	}
+
+	if l.ch != ' ' {
+		res = false
+	}
+
+	l.position = pos
+	l.readPosition = rPos
+	l.ch = ch
+	return res
 }
 
 func newToken(tokenType token.TokenType, ch byte) token.Token {

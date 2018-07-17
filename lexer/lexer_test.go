@@ -9,6 +9,10 @@ import (
 func TestNextToken(t *testing.T) {
 	input := `
 import map from 'Array';
+
+let important = 'important';
+important;
+
 let five = 5;
 let ten = 10;
 
@@ -49,6 +53,13 @@ if (5 < 10) {
 		expectedLiteral string
 	}{
 		{token.IMPORT, "Array:map"},
+		{token.SEMICOLON, ";"},
+		{token.LET, "let"},
+		{token.IDENT, "important"},
+		{token.ASSIGN, "="},
+		{token.STRING, "important"},
+		{token.SEMICOLON, ";"},
+		{token.IDENT, "important"},
 		{token.SEMICOLON, ";"},
 		{token.LET, "let"},
 		{token.IDENT, "five"},

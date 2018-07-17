@@ -960,6 +960,29 @@ func TestParsingComments(t *testing.T) {
 	}
 }
 
+func TestParsingImports(t *testing.T) {
+	tests := []string{
+		"import map from 'Array';",
+		"import asd from 'Array';",
+		"import nums from './.demos/arrays.svo';",
+		"import asd from './asdasd.svo';",
+	}
+
+	for _, input := range tests {
+		l := lexer.New(input)
+		p := New(l)
+		program := p.ParseProgram()
+		checkParserErrors(t, p)
+		stmt := program.Statements[0].(*ast.ExpressionStatement)
+
+		_, ok := stmt.Expression.(*ast.ImportExpression)
+		if !ok {
+			t.Fatalf("exp is not ast.ImportExpression. got=%T", stmt.Expression)
+		}
+	}
+
+}
+
 func testLetStatement(t *testing.T, s ast.Statement, name string) bool {
 	if s.TokenLiteral() != "let" {
 		t.Errorf("s.TokenLiteral not 'let'. got=%q", s.TokenLiteral())
