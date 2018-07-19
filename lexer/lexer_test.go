@@ -15,6 +15,7 @@ important;
 
 let five = 5;
 let ten = 10;
+let none = null;
 
 let add = fn(x, y) {
   x + y;
@@ -46,6 +47,7 @@ if (5 < 10) {
 5 <= 10;
 10 >= 5;
 10 % 5;
+null;
 `
 
 	tests := []struct {
@@ -70,6 +72,11 @@ if (5 < 10) {
 		{token.IDENT, "ten"},
 		{token.ASSIGN, "="},
 		{token.INT, "10"},
+		{token.SEMICOLON, ";"},
+		{token.LET, "let"},
+		{token.IDENT, "none"},
+		{token.ASSIGN, "="},
+		{token.NULL, "null"},
 		{token.SEMICOLON, ";"},
 		{token.LET, "let"},
 		{token.IDENT, "add"},
@@ -163,6 +170,8 @@ if (5 < 10) {
 		{token.INT, "10"},
 		{token.MODULO, "%"},
 		{token.INT, "5"},
+		{token.SEMICOLON, ";"},
+		{token.NULL, "null"},
 		{token.SEMICOLON, ";"},
 		{token.EOF, ""},
 	}

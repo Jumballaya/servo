@@ -13,6 +13,7 @@ const (
 	ILLEGAL = "ILLEGAL"
 	EOF     = "EOF"
 	COMMENT = "#"
+	NULL    = "NULL"
 
 	// Identifiers + literals
 	IDENT  = "IDENT"  // add, foobar, x, y, ...
@@ -71,6 +72,7 @@ const (
 	IF       = "IF"
 	ELSE     = "ELSE"
 	FOR      = "FOR"
+	IN       = "IN"
 	RETURN   = "RETURN"
 	IMPORT   = "IMPORT"
 )
@@ -83,8 +85,10 @@ var keywords = map[string]TokenType{
 	"if":     IF,
 	"else":   ELSE,
 	"for":    FOR,
+	"in":     IN,
 	"return": RETURN,
 	"import": IMPORT,
+	"null":   NULL,
 }
 
 // LookupIdent finds the equivalent constant for a given identifier
