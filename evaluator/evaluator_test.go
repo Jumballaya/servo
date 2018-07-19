@@ -65,6 +65,8 @@ func TestEvalBooleanExpression(t *testing.T) {
 		{"10 >= 100", false},
 		{"1000 >= 1000", true},
 		{"1000 <= 1000", true},
+		{"!null", true},
+		{"!!null", false},
 	}
 
 	for _, tt := range tests {
@@ -104,6 +106,8 @@ func TestIfElseExpressions(t *testing.T) {
 		{"if (1 > 2) { 10 }", nil},
 		{"if (1 > 2) { 10 } else { 20 }", 20},
 		{"if (1 < 2) { 10 } else { 20 }", 10},
+		{"if (null) { 15 } else { 200 }", 200},
+		{"if (!null) { 50 } else { 200 }", 50},
 	}
 
 	for _, tt := range tests {
@@ -202,6 +206,10 @@ func TestErrorHandling(t *testing.T) {
 		{
 			"if (10 > 1) { true + false; }",
 			"unknown operator: BOOLEAN + BOOLEAN",
+		},
+		{
+			`null + 10`,
+			"unknown operator: NULL + INT",
 		},
 		{
 			`
