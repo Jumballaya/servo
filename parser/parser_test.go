@@ -17,6 +17,7 @@ func TestLetStatements(t *testing.T) {
 		{"let x = 5;", "x", 5},
 		{"let y = true;", "y", true},
 		{"let foobar = y;", "foobar", "y"},
+		{"let none = null;", "none", nil},
 	}
 
 	for _, tt := range tests {
@@ -50,6 +51,7 @@ func TestReturnStatements(t *testing.T) {
 		{"return 5;", 5},
 		{"return true;", true},
 		{"return foobar;", "foobar"},
+		{"return null;", nil},
 	}
 
 	for _, tt := range tests {
@@ -451,6 +453,65 @@ func TestIfExpression(t *testing.T) {
 
 	if exp.Alternative != nil {
 		t.Errorf("exp.Alternative.Statements was not nil. got=%+v", exp.Alternative)
+	}
+}
+
+func TestIfNullExpression(t *testing.T) {
+	input := `if (null) { x } else { y }`
+
+	l := lexer.New(input)
+	p := New(l)
+	program := p.ParseProgram()
+	checkParserErrors(t, p)
+
+	if len(program.Statements) != 1 {
+		t.Fatalf("program.Body does not contain %d statements. got=%d\n",
+			1, len(program.Statements))
+	}
+
+	stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+	if !ok {
+		t.Fatalf("program.Statements[0] is not ast.ExpressionStatement. got=%T",
+			program.Statements[0])
+	}
+
+	exp, ok := stmt.Expression.(*ast.IfExpression)
+	if !ok {
+		t.Fatalf("stmt.Expression is not ast.IfExpression. got=%T", stmt.Expression)
+	}
+
+	if !testNullLiteral(t, exp.Condition) {
+		return
+	}
+
+	if len(exp.Consequence.Statements) != 1 {
+		t.Errorf("consequence is not 1 statements. got=%d\n",
+			len(exp.Consequence.Statements))
+	}
+
+	consequence, ok := exp.Consequence.Statements[0].(*ast.ExpressionStatement)
+	if !ok {
+		t.Fatalf("Statements[0] is not ast.ExpressionStatement. got=%T",
+			exp.Consequence.Statements[0])
+	}
+
+	if !testIdentifier(t, consequence.Expression, "x") {
+		return
+	}
+
+	if len(exp.Alternative.Statements) != 1 {
+		t.Errorf("exp.Alternative.Statements does not contain 1 statements. got=%d\n",
+			len(exp.Alternative.Statements))
+	}
+
+	alternative, ok := exp.Alternative.Statements[0].(*ast.ExpressionStatement)
+	if !ok {
+		t.Fatalf("Statements[0] is not ast.ExpressionStatement. got=%T",
+			exp.Alternative.Statements[0])
+	}
+
+	if !testIdentifier(t, alternative.Expression, "y") {
+		return
 	}
 }
 
@@ -984,6 +1045,7 @@ func TestParsingImports(t *testing.T) {
 }
 
 func testLetStatement(t *testing.T, s ast.Statement, name string) bool {
+	t.Helper()
 	if s.TokenLiteral() != "let" {
 		t.Errorf("s.TokenLiteral not 'let'. got=%q", s.TokenLiteral())
 		return false
@@ -1010,7 +1072,7 @@ func testLetStatement(t *testing.T, s ast.Statement, name string) bool {
 
 func testInfixExpression(t *testing.T, exp ast.Expression, left interface{},
 	operator string, right interface{}) bool {
-
+	t.Helper()
 	opExp, ok := exp.(*ast.InfixExpression)
 	if !ok {
 		t.Errorf("exp is not ast.OperatorExpression. got=%T(%s)", exp, exp)
@@ -1033,11 +1095,22 @@ func testInfixExpression(t *testing.T, exp ast.Expression, left interface{},
 	return true
 }
 
+func testNullLiteral(t *testing.T, exp ast.Expression) bool {
+	t.Helper()
+	_, ok := exp.(*ast.NullLiteral)
+	if !ok {
+		t.Errorf("exp is not ast.NullLiteral. got=%T(%s)", exp, exp)
+		return false
+	}
+	return true
+}
+
 func testLiteralExpression(
 	t *testing.T,
 	exp ast.Expression,
 	expected interface{},
 ) bool {
+	t.Helper()
 	switch v := expected.(type) {
 	case int:
 		return testIntegerLiteral(t, exp, int64(v))
@@ -1047,12 +1120,15 @@ func testLiteralExpression(
 		return testIdentifier(t, exp, v)
 	case bool:
 		return testBooleanLiteral(t, exp, v)
+	case nil:
+		return testNullLiteral(t, exp)
 	}
 	t.Errorf("type of exp not handled. got=%T", exp)
 	return false
 }
 
 func testIntegerLiteral(t *testing.T, il ast.Expression, value int64) bool {
+	t.Helper()
 	integ, ok := il.(*ast.IntegerLiteral)
 	if !ok {
 		t.Errorf("il not *ast.IntegerLiteral. got=%T", il)
@@ -1074,6 +1150,7 @@ func testIntegerLiteral(t *testing.T, il ast.Expression, value int64) bool {
 }
 
 func testIdentifier(t *testing.T, exp ast.Expression, value string) bool {
+	t.Helper()
 	ident, ok := exp.(*ast.Identifier)
 	if !ok {
 		t.Errorf("exp not *ast.Identifier. got=%T", exp)
@@ -1095,6 +1172,7 @@ func testIdentifier(t *testing.T, exp ast.Expression, value string) bool {
 }
 
 func testBooleanLiteral(t *testing.T, exp ast.Expression, value bool) bool {
+	t.Helper()
 	bo, ok := exp.(*ast.Boolean)
 	if !ok {
 		t.Errorf("exp not *ast.Boolean. got=%T", exp)
@@ -1116,6 +1194,7 @@ func testBooleanLiteral(t *testing.T, exp ast.Expression, value bool) bool {
 }
 
 func checkParserErrors(t *testing.T, p *Parser) {
+	t.Helper()
 	errors := p.Errors()
 	if len(errors) == 0 {
 		return

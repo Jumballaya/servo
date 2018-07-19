@@ -103,3 +103,11 @@ type Boolean struct {
 func (b *Boolean) expressionNode()      {}
 func (b *Boolean) TokenLiteral() string { return b.Token.Literal }
 func (b *Boolean) String() string       { return b.Token.Literal }
+
+type NullLiteral struct {
+	Token token.Token
+}
+
+func (n *NullLiteral) expressionNode()      {}
+func (n *NullLiteral) TokenLiteral() string { return n.Token.Literal }
+func (n *NullLiteral) String() string       { return n.Token.Literal }
