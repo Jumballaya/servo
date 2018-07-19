@@ -176,3 +176,19 @@ var builtins = map[string]*object.Builtin{
 		},
 	},
 }
+
+func getBuiltin(name string, env *object.Environment) (*object.Builtin, bool) {
+	if env.Silent && name == "log" {
+		return &object.Builtin{
+			Fn: func(args ...object.Object) object.Object {
+				return NULL
+			},
+		}, true
+	}
+
+	if builtin, ok := builtins[name]; ok {
+		return builtin, true
+	}
+
+	return builtins[name], false
+}

@@ -16,6 +16,7 @@ func LoadAndEvalFile(file string) object.Object {
 		return newError(err.Error())
 	}
 	env := object.NewEnvironment()
+	env.Silent = true
 	l := lexer.New(requiredCode)
 	p := parser.New(l)
 
@@ -34,6 +35,7 @@ func GetObjectFromFile(file, objName string) object.Object {
 	}
 
 	env := object.NewEnvironment()
+	env.Silent = true
 	l := lexer.New(requiredCode)
 	p := parser.New(l)
 	program := p.ParseProgram()

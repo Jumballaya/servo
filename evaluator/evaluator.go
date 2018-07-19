@@ -330,7 +330,7 @@ func evalIdentifier(node *ast.Identifier, env *object.Environment) object.Object
 		return evalJSONExpression()
 	}
 
-	if builtin, ok := builtins[node.Value]; ok {
+	if builtin, ok := getBuiltin(node.Value, env); ok {
 		return builtin
 	}
 
