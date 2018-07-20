@@ -2,20 +2,13 @@ package evaluator
 
 import (
 	"fmt"
-	"os"
-	"path/filepath"
-	"strings"
 
 	"github.com/jumballaya/servo/ast"
 	"github.com/jumballaya/servo/object"
 )
 
-var (
-	TRUE  = &object.Boolean{Value: true}
-	FALSE = &object.Boolean{Value: false}
-	NULL  = &object.Null{}
-)
-
+// Eval is the evaluator function that recursively runs, evaluating the program
+// and its statements.
 func Eval(node ast.Node, env *object.Environment) object.Object {
 	switch node := node.(type) {
 
@@ -29,11 +22,11 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 
 	// Import Expression
 	case *ast.ImportExpression:
-		return evalImportExpression(node, env)
+		return evalImportStatement(node, env)
 
 	// Integer
 	case *ast.IntegerLiteral:
-		return &object.Integer{Value: node.Value}
+		return evalIntegerLiteral(node, env)
 
 	// Boolean
 	case *ast.Boolean:
@@ -45,11 +38,7 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 
 	// Array
 	case *ast.ArrayLiteral:
-		elements := evalExpressions(node.Elements, env)
-		if len(elements) == 1 && isError(elements[0]) {
-			return elements[0]
-		}
-		return &object.Array{Elements: elements}
+		return evalArrayLiteral(node, env)
 
 	// Hash
 	case *ast.HashLiteral:
@@ -99,19 +88,11 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 
 	// Return
 	case *ast.ReturnStatement:
-		val := Eval(node.ReturnValue, env)
-		if isError(val) {
-			return val
-		}
-		return &object.ReturnValue{Value: val}
+		return evalReturnStatement(node, env)
 
 	// Let
 	case *ast.LetStatement:
-		val := Eval(node.Value, env)
-		if isError(val) {
-			return val
-		}
-		return env.Set(node.Name.Value, val)
+		return evalLetStatement(node, env)
 
 	// Identifier
 	case *ast.Identifier:
@@ -119,21 +100,11 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 
 	// Function
 	case *ast.FunctionLiteral:
-		params := node.Parameters
-		body := node.Body
-		return &object.Function{Parameters: params, Env: env, Body: body}
+		return evalFunctionLiteral(node, env)
 
 	// Function Call
 	case *ast.CallExpression:
-		function := Eval(node.Function, env)
-		if isError(function) {
-			return function
-		}
-		args := evalExpressions(node.Arguments, env)
-		if len(args) == 1 && isError(args[0]) {
-			return args[0]
-		}
-		return applyFunction(function, args)
+		return evalCallFunction(node, env)
 
 	// Default
 	default:
@@ -141,10 +112,12 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 	}
 }
 
+// New Error generates an error object
 func newError(format string, a ...interface{}) *object.Error {
 	return &object.Error{Message: fmt.Sprintf(format, a...)}
 }
 
+// Eval Pogram
 func evalProgram(program *ast.Program, env *object.Environment) object.Object {
 	var result object.Object
 
@@ -162,6 +135,7 @@ func evalProgram(program *ast.Program, env *object.Environment) object.Object {
 	return result
 }
 
+// Eval Statements
 func evalStatements(stmts []ast.Statement, env *object.Environment) object.Object {
 	var result object.Object
 
@@ -176,6 +150,7 @@ func evalStatements(stmts []ast.Statement, env *object.Environment) object.Objec
 	return result
 }
 
+// Eval Expressions
 func evalExpressions(exps []ast.Expression, env *object.Environment) []object.Object {
 	var result []object.Object
 
@@ -191,103 +166,7 @@ func evalExpressions(exps []ast.Expression, env *object.Environment) []object.Ob
 	return result
 }
 
-func evalPrefixExpression(operator string, right object.Object) object.Object {
-	switch operator {
-	case "!":
-		return evalBangOperatorExpression(right)
-	case "-":
-		return evalMinusPrefixOperatorExpression(right)
-	default:
-		return newError("unknown operator: %s%s", operator, right.Type())
-	}
-}
-
-func evalInfixExpression(operator string, left, right object.Object) object.Object {
-	switch {
-	case left.Type() == object.INTEGER_OBJ && right.Type() == object.INTEGER_OBJ:
-		return evalIntegerInfixExpression(operator, left, right)
-	case left.Type() == object.STRING_OBJ && right.Type() == object.STRING_OBJ:
-		return evalStringInfixExpression(operator, left, right)
-	case operator == "==":
-		return nativeBooleanToBooleanObject(left == right)
-	case operator == "!=":
-		return nativeBooleanToBooleanObject(left != right)
-	case left.Type() != right.Type():
-		return newError("type mismatch: %s %s %s", left.Type(), operator, right.Type())
-	default:
-		return newError("unknown operator: %s %s %s", left.Type(), operator, right.Type())
-	}
-}
-
-func evalBangOperatorExpression(right object.Object) object.Object {
-	switch right {
-	case TRUE:
-		return FALSE
-	case FALSE:
-		return TRUE
-	case NULL:
-		return TRUE
-	default:
-		return FALSE
-	}
-}
-
-func evalMinusPrefixOperatorExpression(right object.Object) object.Object {
-	if right.Type() != object.INTEGER_OBJ {
-		return newError("unknown operator: -%s", right.Type())
-	}
-
-	value := right.(*object.Integer).Value
-	return &object.Integer{Value: -value}
-}
-
-func evalIntegerInfixExpression(operator string, left, right object.Object) object.Object {
-	leftVal := left.(*object.Integer).Value
-	rightVal := right.(*object.Integer).Value
-
-	switch operator {
-	case "+":
-		return &object.Integer{Value: leftVal + rightVal}
-	case "-":
-		return &object.Integer{Value: leftVal - rightVal}
-	case "*":
-		return &object.Integer{Value: leftVal * rightVal}
-	case "%":
-		return &object.Integer{Value: leftVal % rightVal}
-	case "/":
-		return &object.Integer{Value: leftVal / rightVal}
-	case "<":
-		return nativeBooleanToBooleanObject(leftVal < rightVal)
-	case ">":
-		return nativeBooleanToBooleanObject(leftVal > rightVal)
-	case ">=":
-		return nativeBooleanToBooleanObject(leftVal >= rightVal)
-	case "<=":
-		return nativeBooleanToBooleanObject(leftVal <= rightVal)
-	case "==":
-		return nativeBooleanToBooleanObject(leftVal == rightVal)
-	case "!=":
-		return nativeBooleanToBooleanObject(leftVal != rightVal)
-	default:
-		return newError("unknown operator: %s %s %s", left.Type(), operator, right.Type())
-	}
-}
-
-func evalStringInfixExpression(operator string, left, right object.Object) object.Object {
-	leftVal := left.(*object.String).Value
-	rightVal := right.(*object.String).Value
-	switch operator {
-	case "+":
-		return &object.String{Value: leftVal + rightVal}
-	case "==":
-		return &object.Boolean{Value: leftVal == rightVal}
-	case "!=":
-		return &object.Boolean{Value: leftVal != rightVal}
-	default:
-		return newError("unknown operator: %s %s %s", left.Type(), operator, right.Type())
-	}
-}
-
+// Eval Block Statement
 func evalBlockStatement(block *ast.BlockStatement, env *object.Environment) object.Object {
 	var result object.Object
 
@@ -305,219 +184,10 @@ func evalBlockStatement(block *ast.BlockStatement, env *object.Environment) obje
 	return result
 }
 
-func evalIfExpression(ie *ast.IfExpression, env *object.Environment) object.Object {
-	condition := Eval(ie.Condition, env)
-
-	if isError(condition) {
-		return condition
-	}
-
-	if isTruthy(condition) {
-		return Eval(ie.Consequence, env)
-	} else if ie.Alternative != nil {
-		return Eval(ie.Alternative, env)
-	} else {
-		return NULL
-	}
-}
-
-func evalIdentifier(node *ast.Identifier, env *object.Environment) object.Object {
-	if val, ok := env.Get(node.Value); ok {
-		return val
-	}
-
-	if env.Silent && node.Value == "log" {
-		return NULL
-	}
-
-	if builtin, ok := getBuiltin(node.Value, env); ok {
-		return builtin
-	}
-
-	return newError("identifier not found: %s", node.Value)
-}
-
-func nativeBooleanToBooleanObject(val bool) *object.Boolean {
-	if val {
-		return TRUE
-	}
-	return FALSE
-}
-
-func evalStringLiteral(node *ast.StringLiteral, env *object.Environment) object.Object {
-	val := node.Value
-	val = strings.Replace(val, "\\n", "\n", -1)
-	val = strings.Replace(val, "\\t", "\t", -1)
-	val = strings.Replace(val, "\\r", "\r", -1)
-	return &object.String{Value: val}
-}
-
-func evalIndexExpression(left, index object.Object) object.Object {
-	switch {
-	case left.Type() == object.ARRAY_OBJ && index.Type() == object.INTEGER_OBJ:
-		return evalArrayIndexExpression(left, index)
-	case left.Type() == object.HASH_OBJ:
-		return evalHashIndexExpression(left, index)
-	default:
-		return newError("index operator not supported: %s", left.Type())
-	}
-}
-
-func evalArrayIndexExpression(array, index object.Object) object.Object {
-	arrayObject := array.(*object.Array)
-	id := index.(*object.Integer).Value
-	max := int64(len(arrayObject.Elements) - 1)
-
-	if id < 0 || id > max {
-		return NULL
-	}
-
-	return arrayObject.Elements[id]
-}
-
-func evalHashIndexExpression(hash, index object.Object) object.Object {
-	hashObject := hash.(*object.Hash)
-
-	key, ok := index.(object.Hashable)
-	if !ok {
-		return newError("unusable as a hash key: %s", index.Type())
-	}
-
-	pair, ok := hashObject.Pairs[key.HashKey()]
-	if !ok {
-		return NULL
-	}
-
-	return pair.Value
-}
-
-func evalHashLiteral(node *ast.HashLiteral, env *object.Environment) object.Object {
-	pairs := make(map[object.HashKey]object.HashPair)
-
-	for keyNode, valNode := range node.Pairs {
-		key := Eval(keyNode, env)
-		if isError(key) {
-			return key
-		}
-
-		hashKey, ok := key.(object.Hashable)
-		if !ok {
-			return newError("unusable as a hash key: %s", key.Type())
-		}
-
-		value := Eval(valNode, env)
-		if isError(value) {
-			return value
-		}
-
-		hashed := hashKey.HashKey()
-		pairs[hashed] = object.HashPair{Key: key, Value: value}
-	}
-
-	return &object.Hash{Pairs: pairs}
-}
-
-func evalImportExpression(importExp *ast.ImportExpression, env *object.Environment) object.Object {
-	mod := importExp.Path.String()
-	obj := importExp.Name.String()
-
-	// Open the module's file
-	// Evaluate it
-	// Rip out the identifier that is being imported
-
-	// Comes from a file
-	if strings.HasPrefix(mod, "./") || strings.HasPrefix(mod, "../") || strings.HasPrefix(mod, "/") {
-		var currentFile string
-		if len(os.Args) < 2 {
-			currentFile = os.Args[0]
-		} else {
-			currentFile = os.Args[1]
-		}
-		currentDir := "./" + strings.Join(strings.Split(currentFile, "/")[:1], "/")
-
-		dir, err := filepath.Abs(currentDir + "/" + mod)
-		if err != nil {
-			fmt.Println(err.Error())
-			return newError(err.Error())
-		}
-		pulled := GetObjectFromFile(dir, obj)
-		env.Set(obj, pulled)
-		return NULL
-		// Comes from the standard lib
-	} else {
-		fn, ok := env.Get(mod)
-		if !ok {
-			return newError("improper import, function key not found")
-		}
-
-		hash, ok := fn.(*object.Hash)
-		if !ok {
-			return newError("Must import off of an exported hash")
-		}
-
-		key := (&object.String{Value: obj}).HashKey()
-
-		found := hash.Pairs[key].Value
-		_, ok = found.(*object.Null)
-		if ok {
-			env.Set(obj, NULL)
-			return NULL
-		}
-
-		env.Set(obj, found)
-		return NULL
-	}
-
-	return NULL
-}
-
-func isTruthy(obj object.Object) bool {
-	switch obj {
-	case NULL:
-		return false
-	case TRUE:
-		return true
-	case FALSE:
-		return false
-	default:
-		return true
-	}
-}
-
+// Is Error checks if an object is an error or not
 func isError(obj object.Object) bool {
 	if obj != nil {
 		return obj.Type() == object.ERROR_OBJ
 	}
 	return false
-}
-
-func applyFunction(fn object.Object, args []object.Object) object.Object {
-	switch fn := fn.(type) {
-	case *object.Function:
-		extendedEnv := extendFunctionEnv(fn, args)
-		evaluated := Eval(fn.Body, extendedEnv)
-		return unwrapReturnValue(evaluated)
-	case *object.Builtin:
-		return fn.Fn(args...)
-	default:
-		return newError("not a function: %s", fn.Type())
-	}
-}
-
-func extendFunctionEnv(fn *object.Function, args []object.Object) *object.Environment {
-	env := object.NewEnclosedEnvironment(fn.Env)
-
-	for paramId, param := range fn.Parameters {
-		env.Set(param.Value, args[paramId])
-	}
-
-	return env
-}
-
-func unwrapReturnValue(obj object.Object) object.Object {
-	if returnValue, ok := obj.(*object.ReturnValue); ok {
-		return returnValue.Value
-	}
-
-	return obj
 }

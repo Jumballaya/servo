@@ -37,20 +37,20 @@ None made so far
   * ~~Fix string parsing to escape the special characters like \n \t etc.~~
   * ~~JSON support~~
   * ~~Add import keyword to import specific identifier objects from a file~~
+  * ~~Get null working~~
+  * ~~Bitwise operators >>, <<, |, &, &^~~
+  * ~~Automatic semicolon insertion~~
+  * ~~Increment/Decremnt by operators += , -= , \*= , \=~~
+  * ~~Power operator ^~~
   * Add simple classes with fields and methods
     - Dot notation `foo.bar`
   * Add a standard library that can be imported into any file.
     - ~~Basic support~~
     - Standard lib files can be imported by itself (aka `import map from 'Array';`) and without extension
     - Any other files have to be a relative path or absolute path to the file to import (aka `import func from './module.svo';`) and must have the file extension
-  * ~~Get null working~~
   * Implement bytes
-  * Byte operators >>, <<, |, &, &^
   * Implement floats
   * Rewrite lexer/parser to use runes
-  * Automatic semicolon insertion
-  * Increment/Decremnt by operators += , -= , \*= , \=
-  * Power operator ^
   * Multiline Comments /\* \*/
   * String escaping e.g. `\\b` or `"\"hello\""`
   * Hex digits e.g. `0xfff`
@@ -68,3 +68,4 @@ None made so far
   * Add try/catch
   * Add `import './file.svo' as file` syntax to import
   * Add `import func from './example.svo' as function` syntax to import
+  * Change import so it builds the AST during the parsing stage rather than evaluation
