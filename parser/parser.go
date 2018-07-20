@@ -11,7 +11,7 @@ import (
 const (
 	_ int = iota
 	LOWEST
-	DOT         // foo.bar
+	COMPARE     // &&, ||
 	EQUALS      // ==
 	LESSGREATER // > or <
 	SUM         // +
@@ -19,23 +19,37 @@ const (
 	PREFIX      // -X or !X
 	CALL        // myFunc(X)
 	INDEX       // array[index] or foo.bar
+	ASSIGN
 )
 
 var precedences = map[token.TokenType]int{
-	token.EQ:       EQUALS,
-	token.NOT_EQ:   EQUALS,
-	token.LT:       LESSGREATER,
-	token.GT:       LESSGREATER,
-	token.LTE:      LESSGREATER,
-	token.GTE:      LESSGREATER,
-	token.PLUS:     SUM,
-	token.MINUS:    SUM,
-	token.SLASH:    PRODUCT,
-	token.ASTERISK: PRODUCT,
-	token.MODULO:   PRODUCT,
-	token.LPAREN:   CALL,
-	token.LBRACKET: INDEX,
-	token.DOT:      DOT,
+	token.AND:            COMPARE,
+	token.OR:             COMPARE,
+	token.EQ:             EQUALS,
+	token.NOT_EQ:         EQUALS,
+	token.LT:             LESSGREATER,
+	token.GT:             LESSGREATER,
+	token.LTE:            LESSGREATER,
+	token.GTE:            LESSGREATER,
+	token.PLUS:           SUM,
+	token.MINUS:          SUM,
+	token.BITWISEOR:      SUM,
+	token.SLASH:          PRODUCT,
+	token.ASTERISK:       PRODUCT,
+	token.MODULO:         PRODUCT,
+	token.CARROT:         PRODUCT,
+	token.BITWISEAND:     PRODUCT,
+	token.BITWISEANDNOT:  PRODUCT,
+	token.SHIFTLEFT:      PRODUCT,
+	token.SHIFTRIGHT:     PRODUCT,
+	token.LPAREN:         CALL,
+	token.LBRACKET:       INDEX,
+	token.DOT:            INDEX,
+	token.ASSIGN:         ASSIGN,
+	token.PLUSASSIGN:     ASSIGN,
+	token.MINUSASSIGN:    ASSIGN,
+	token.ASTERISKASSIGN: ASSIGN,
+	token.SLASHASSIGN:    ASSIGN,
 }
 
 type (
@@ -98,6 +112,18 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerInfix(token.GT, p.parseInfixExpression)
 	p.registerInfix(token.LTE, p.parseInfixExpression)
 	p.registerInfix(token.GTE, p.parseInfixExpression)
+	p.registerInfix(token.SHIFTLEFT, p.parseInfixExpression)
+	p.registerInfix(token.SHIFTRIGHT, p.parseInfixExpression)
+	p.registerInfix(token.BITWISEANDNOT, p.parseInfixExpression)
+	p.registerInfix(token.BITWISEOR, p.parseInfixExpression)
+	p.registerInfix(token.BITWISEAND, p.parseInfixExpression)
+	p.registerInfix(token.PLUSASSIGN, p.parseInfixExpression)
+	p.registerInfix(token.MINUSASSIGN, p.parseInfixExpression)
+	p.registerInfix(token.ASTERISKASSIGN, p.parseInfixExpression)
+	p.registerInfix(token.SLASHASSIGN, p.parseInfixExpression)
+	p.registerInfix(token.CARROT, p.parseInfixExpression)
+	p.registerInfix(token.AND, p.parseInfixExpression)
+	p.registerInfix(token.OR, p.parseInfixExpression)
 	p.registerInfix(token.LPAREN, p.parseCallExpression)
 	p.registerInfix(token.LBRACKET, p.parseIndexExpression)
 
