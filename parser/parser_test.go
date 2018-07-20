@@ -94,7 +94,7 @@ func testIntegerLiteral(t *testing.T, il ast.Expression, value int64) bool {
 	t.Helper()
 	integ, ok := il.(*ast.IntegerLiteral)
 	if !ok {
-		t.Errorf("il not *ast.IntegerLiteral. got=%T", il)
+		t.Errorf("expression not *ast.IntegerLiteral. got=%T", il)
 		return false
 	}
 

@@ -57,3 +57,30 @@ func TestStringInfixOperations(t *testing.T) {
 		}
 	}
 }
+
+func TestReassignOperators(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected int64
+	}{
+		{`let x = 0; x += 5;`, 5},
+		{`let x = 10; x -= 5;`, 5},
+		{`let x = 5; x *= 5;`, 25},
+		{`let x = 10; x /= 5;`, 2},
+		{`let x = 0; x += 5; x;`, 5},
+		{`let x = 10; x -= 5; x;`, 5},
+		{`let x = 5; x *= 5; x;`, 25},
+		{`let x = 10; x /= 5; x;`, 2},
+	}
+
+	for _, tt := range tests {
+		evaluated := testEval(tt.input)
+		num, ok := evaluated.(*object.Integer)
+		if !ok {
+			t.Fatalf("object is not an Integer. got=%T (%+v)", evaluated, evaluated)
+		}
+		if num.Value != tt.expected {
+			t.Errorf("Integer has wrong value. got=%q", num.Value)
+		}
+	}
+}

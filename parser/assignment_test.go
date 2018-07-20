@@ -101,3 +101,39 @@ func TestParsingImports(t *testing.T) {
 	}
 
 }
+
+func TestReassignExpression(t *testing.T) {
+	tests := []struct {
+		input              string
+		expectedIdentifier string
+	}{
+		{"let x = 5; x += 5; x;", "x"},
+		{"let x = 10; x -= 5; x;", "x"},
+		{"let x = 5; x *= 5; x;", "x"},
+		{"let x = 10; x /= 2; x;", "x"},
+		{`let x = "hello"; x += " world"; x;`, "x"},
+	}
+
+	for _, tt := range tests {
+		l := lexer.New(tt.input)
+		p := New(l)
+		program := p.ParseProgram()
+		checkParserErrors(t, p)
+
+		if len(program.Statements) != 3 {
+			t.Fatalf("program.Statements does not contain 3 statements. got=%d",
+				len(program.Statements))
+		}
+
+		letStmt := program.Statements[0]
+		if !testLetStatement(t, letStmt, tt.expectedIdentifier) {
+			return
+		}
+
+		stmt := program.Statements[2]
+		val := stmt.(*ast.ExpressionStatement).Expression
+		if !testIdentifier(t, val, tt.expectedIdentifier) {
+			return
+		}
+	}
+}

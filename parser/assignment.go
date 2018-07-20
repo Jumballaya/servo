@@ -89,3 +89,38 @@ func (p *Parser) parseImportStatement() ast.Expression {
 
 	return stmt
 }
+
+// Parse Reassign takes a reassignment operator like `[identifier] += value` and turns it into
+// a brand new assignment expression
+func (p *Parser) parseReassignExpression(left ast.Expression) ast.Expression {
+	stmt := &ast.AssignStatement{Token: p.curToken, Left: left}
+	p.nextToken()
+	right := p.parseExpression(LOWEST).(ast.Expression)
+
+	switch stmt.Token.Type {
+	case token.PLUSASSIGN:
+		stmt.Value = makeInfix(token.PLUS, left, right)
+	case token.MINUSASSIGN:
+		stmt.Value = makeInfix(token.MINUS, left, right)
+	case token.ASTERISKASSIGN:
+		stmt.Value = makeInfix(token.ASTERISK, left, right)
+	case token.SLASHASSIGN:
+		stmt.Value = makeInfix(token.SLASH, left, right)
+	}
+
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+
+	return stmt.Value
+}
+
+// Make Infix creates an infix expression
+func makeInfix(t token.TokenType, left, right ast.Expression) *ast.InfixExpression {
+	return &ast.InfixExpression{
+		Token:    token.Token{Type: t, Literal: string(t)},
+		Left:     left,
+		Operator: string(t),
+		Right:    right,
+	}
+}
