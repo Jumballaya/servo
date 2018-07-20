@@ -48,6 +48,18 @@ if (5 < 10) {
 10 >= 5;
 10 % 5;
 null;
+5 << 5;
+5 >> 5;
+5 &^ 5;
+5 & 5;
+5 | 5;
+5 += 5;
+5 -= 5;
+5 *= 5;
+5 /= 5;
+5 ^ 2;
+true && false;
+true || false;
 `
 
 	tests := []struct {
@@ -175,6 +187,54 @@ null;
 		{token.INT, "5"},
 		{token.SEMICOLON, ";"},
 		{token.NULL, "null"},
+		{token.SEMICOLON, ";"},
+		{token.INT, "5"},
+		{token.SHIFTLEFT, "<<"},
+		{token.INT, "5"},
+		{token.SEMICOLON, ";"},
+		{token.INT, "5"},
+		{token.SHIFTRIGHT, ">>"},
+		{token.INT, "5"},
+		{token.SEMICOLON, ";"},
+		{token.INT, "5"},
+		{token.BITWISEANDNOT, "&^"},
+		{token.INT, "5"},
+		{token.SEMICOLON, ";"},
+		{token.INT, "5"},
+		{token.BITWISEAND, "&"},
+		{token.INT, "5"},
+		{token.SEMICOLON, ";"},
+		{token.INT, "5"},
+		{token.BITWISEOR, "|"},
+		{token.INT, "5"},
+		{token.SEMICOLON, ";"},
+		{token.INT, "5"},
+		{token.PLUSASSIGN, "+="},
+		{token.INT, "5"},
+		{token.SEMICOLON, ";"},
+		{token.INT, "5"},
+		{token.MINUSASSIGN, "-="},
+		{token.INT, "5"},
+		{token.SEMICOLON, ";"},
+		{token.INT, "5"},
+		{token.ASTERISKASSIGN, "*="},
+		{token.INT, "5"},
+		{token.SEMICOLON, ";"},
+		{token.INT, "5"},
+		{token.SLASHASSIGN, "/="},
+		{token.INT, "5"},
+		{token.SEMICOLON, ";"},
+		{token.INT, "5"},
+		{token.CARROT, "^"},
+		{token.INT, "2"},
+		{token.SEMICOLON, ";"},
+		{token.TRUE, "true"},
+		{token.AND, "&&"},
+		{token.FALSE, "false"},
+		{token.SEMICOLON, ";"},
+		{token.TRUE, "true"},
+		{token.OR, "||"},
+		{token.FALSE, "false"},
 		{token.SEMICOLON, ";"},
 		{token.EOF, ""},
 	}

@@ -42,6 +42,8 @@ const (
 	GTE    = ">="
 	EQ     = "=="
 	NOT_EQ = "!="
+	AND    = "&&"
+	OR     = "||"
 
 	// Bitwise operators
 	BITWISEOR     = "|"

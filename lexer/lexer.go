@@ -110,13 +110,25 @@ func (l *Lexer) NextToken() token.Token {
 			tok = newToken(token.GT, l.ch)
 		}
 	case '|':
-		tok = newToken(token.BITWISEOR, l.ch)
+		if l.peekChar() == '|' {
+			ch := l.ch
+			l.readChar()
+			literal := string(ch) + string(l.ch)
+			tok = token.Token{Type: token.OR, Literal: literal}
+		} else {
+			tok = newToken(token.BITWISEOR, l.ch)
+		}
 	case '&':
 		if l.peekChar() == '^' {
 			ch := l.ch
 			l.readChar()
 			literal := string(ch) + string(l.ch)
 			tok = token.Token{Type: token.BITWISEANDNOT, Literal: literal}
+		} else if l.peekChar() == '&' {
+			ch := l.ch
+			l.readChar()
+			literal := string(ch) + string(l.ch)
+			tok = token.Token{Type: token.AND, Literal: literal}
 		} else {
 			tok = newToken(token.BITWISEAND, l.ch)
 		}
