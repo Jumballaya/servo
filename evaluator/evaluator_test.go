@@ -97,6 +97,7 @@ func testEval(input string) object.Object {
 	p := parser.New(l)
 	program := p.ParseProgram()
 	env := object.NewEnvironment()
+	env.Silent = true
 
 	return Eval(program, env)
 }
@@ -131,6 +132,7 @@ func testBooleanObject(t *testing.T, obj object.Object, expected bool) bool {
 }
 
 func testNullObject(t *testing.T, obj object.Object) bool {
+	t.Helper()
 	if obj != NULL {
 		t.Errorf("object is not NULL. got=%T (%+v)", obj, obj)
 		return false

@@ -94,6 +94,10 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 	case *ast.LetStatement:
 		return evalLetStatement(node, env)
 
+	// Assignment
+	case *ast.AssignStatement:
+		return evalAssignStatement(node, env)
+
 	// Identifier
 	case *ast.Identifier:
 		return evalIdentifier(node, env)

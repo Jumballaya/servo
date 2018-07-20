@@ -112,7 +112,7 @@ func (p *Parser) parseReassignExpression(left ast.Expression) ast.Expression {
 		p.nextToken()
 	}
 
-	return stmt.Value
+	return stmt
 }
 
 // Make Infix creates an infix expression

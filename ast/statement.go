@@ -104,23 +104,3 @@ func (bs *BlockStatement) String() string {
 	}
 	return out.String()
 }
-
-type AssignStatement struct {
-	Token token.Token
-	Left  Expression
-	Value Expression
-}
-
-func (as *AssignStatement) statementNode()       {}
-func (as *AssignStatement) TokenLiteral() string { return as.Token.Literal }
-func (as *AssignStatement) String() string {
-	var out bytes.Buffer
-
-	out.WriteString(as.Left.String())
-	out.WriteString(" = ")
-	if as.Value != nil {
-		out.WriteString(as.Value.String())
-	}
-	out.WriteByte(';')
-	return out.String()
-}

@@ -26,7 +26,6 @@ func TestBuiltinFunctions(t *testing.T) {
 		{`last(1)`, "argument to `last` must be ARRAY or STRING, got INTEGER"},
 		{`rest([1, 2, 3])`, []int{2, 3}},
 		{`rest([])`, nil},
-		{`log("hello", "world!")`, nil},
 		{`push([], 1)`, []int{1}},
 		{`push(1, 1)`, "argument to `push` must be ARRAY, got INTEGER"},
 	}

@@ -19,6 +19,22 @@ func evalLetStatement(node *ast.LetStatement, env *object.Environment) object.Ob
 	return env.Set(node.Name.Value, val)
 }
 
+// Eval Assignment Statement
+func evalAssignStatement(node *ast.AssignStatement, env *object.Environment) object.Object {
+	val := Eval(node.Value, env)
+	if isError(val) {
+		return val
+	}
+
+	exp, _ := node.Left.(ast.Expression)
+	ident, ok := exp.(*ast.Identifier)
+	if !ok {
+		return newError("left value is not an identifier")
+	}
+
+	return env.Set(ident.Value, val)
+}
+
 // Eval Return Statement
 func evalReturnStatement(node *ast.ReturnStatement, env *object.Environment) object.Object {
 	val := Eval(node.ReturnValue, env)

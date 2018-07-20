@@ -35,7 +35,6 @@ None made so far
   * ~~Fix comment parsing so quotes and special characters work~~
   * ~~Fix string parsing to include the single quote~~
   * ~~Fix string parsing to escape the special characters like \n \t etc.~~
-  * ~~JSON support~~
   * ~~Add import keyword to import specific identifier objects from a file~~
   * ~~Get null working~~
   * ~~Bitwise operators >>, <<, |, &, &^~~

@@ -76,11 +76,12 @@ func TestReassignOperators(t *testing.T) {
 	for _, tt := range tests {
 		evaluated := testEval(tt.input)
 		num, ok := evaluated.(*object.Integer)
+
 		if !ok {
 			t.Fatalf("object is not an Integer. got=%T (%+v)", evaluated, evaluated)
 		}
 		if num.Value != tt.expected {
-			t.Errorf("Integer has wrong value. got=%q", num.Value)
+			t.Errorf("Integer has wrong value. Expected: %d, Got: %d", tt.expected, num.Value)
 		}
 	}
 }
