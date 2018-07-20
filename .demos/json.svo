@@ -1,4 +1,0 @@
-let x = '{"foo": "bar", "example": 7}';
-let j = json(x);
-
-log(j["foo"]);

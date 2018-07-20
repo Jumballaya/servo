@@ -54,7 +54,10 @@ null;
 		expectedType    token.TokenType
 		expectedLiteral string
 	}{
-		{token.IMPORT, "Array:map"},
+		{token.IMPORT, "import"},
+		{token.IDENT, "map"},
+		{token.FROM, "from"},
+		{token.STRING, "Array"},
 		{token.SEMICOLON, ";"},
 		{token.LET, "let"},
 		{token.IDENT, "important"},

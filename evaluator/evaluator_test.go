@@ -209,7 +209,7 @@ func TestErrorHandling(t *testing.T) {
 		},
 		{
 			`null + 10`,
-			"unknown operator: NULL + INT",
+			"type mismatch: NULL + INTEGER",
 		},
 		{
 			`

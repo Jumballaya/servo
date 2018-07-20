@@ -101,11 +101,6 @@ func (l *Lexer) NextToken() token.Token {
 		tok.Literal = l.readString('\n')
 	default:
 		if isLetter(l.ch) {
-			if l.isImport() {
-				tok = l.readImport()
-				l.readChar()
-				return tok
-			}
 			tok.Literal = l.readIdentifier()
 			tok.Type = token.LookupIdent(tok.Literal)
 			return tok
@@ -168,39 +163,6 @@ func (l *Lexer) readString(initial byte) string {
 	}
 }
 
-func (l *Lexer) readImport() token.Token {
-	stmt := l.readString(' ')
-	if stmt != "mport" {
-		illegal := newToken(token.ILLEGAL, l.ch)
-		return illegal
-	}
-
-	// Case: import map from 'Array';
-	if l.ch != '\'' && l.ch != '"' {
-		module := l.readString(' ')
-		fromStmt := l.readString(' ')
-
-		if fromStmt != "from" {
-			illegal := newToken(token.ILLEGAL, l.ch)
-			return illegal
-		}
-
-		l.skipWhiteSpace()
-
-		if l.ch != '\'' && l.ch != '"' {
-			illegal := newToken(token.ILLEGAL, l.ch)
-			return illegal
-		}
-
-		object := l.readString('\'')
-
-		return token.Token{Type: token.IMPORT, Literal: object + ":" + module}
-	}
-
-	illegal := newToken(token.ILLEGAL, l.ch)
-	return illegal
-}
-
 func (l *Lexer) skipWhiteSpace() {
 	for l.ch == ' ' || l.ch == '\t' || l.ch == '\n' || l.ch == '\r' {
 		l.readChar()
@@ -212,30 +174,6 @@ func (l *Lexer) peekChar() byte {
 		return 0
 	}
 	return l.input[l.readPosition]
-}
-
-func (l *Lexer) isImport() bool {
-	pos := l.position
-	rPos := l.readPosition
-	ch := l.ch
-	letters := []byte{'i', 'm', 'p', 'o', 'r', 't'}
-	res := true
-
-	for _, letter := range letters {
-		if l.ch != letter {
-			res = false
-		}
-		l.readChar()
-	}
-
-	if l.ch != ' ' {
-		res = false
-	}
-
-	l.position = pos
-	l.readPosition = rPos
-	l.ch = ch
-	return res
 }
 
 func newToken(tokenType token.TokenType, ch byte) token.Token {

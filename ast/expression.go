@@ -2,6 +2,7 @@ package ast
 
 import (
 	"bytes"
+	"fmt"
 	"strings"
 
 	"github.com/jumballaya/servo/token"
@@ -141,9 +142,13 @@ func (ie *IndexExpression) String() string {
 
 type ImportExpression struct {
 	Token token.Token
+	Path  *StringLiteral
+	Name  *Identifier
 	Value string
 }
 
 func (ie *ImportExpression) expressionNode()      {}
 func (ie *ImportExpression) TokenLiteral() string { return ie.Token.Literal }
-func (ie *ImportExpression) String() string       { return ie.Token.Literal }
+func (ie *ImportExpression) String() string {
+	return fmt.Sprintf("import %s as %s;", ie.Path.String(), ie.Name.String())
+}

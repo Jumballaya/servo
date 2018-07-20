@@ -3,12 +3,23 @@ package evaluator
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"strings"
 
 	"github.com/jumballaya/servo/lexer"
 	"github.com/jumballaya/servo/object"
 	"github.com/jumballaya/servo/parser"
 )
+
+func FileExists(file string) bool {
+	stat, err := os.Stat(file)
+	return !os.IsNotExist(err) && !stat.IsDir()
+}
+
+func IsDir(file string) bool {
+	stat, err := os.Stat(file)
+	return !os.IsNotExist(err) && stat.IsDir()
+}
 
 func LoadAndEvalFile(file string) object.Object {
 	requiredCode, err := LoadFile(file)

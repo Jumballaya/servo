@@ -48,7 +48,7 @@ None made so far
     - ~~Basic support~~
     - Standard lib files can be imported by itself (aka `import map from 'Array';`) and without extension
     - Any other files have to be a relative path or absolute path to the file to import (aka `import func from './module.svo';`) and must have the file extension
-  * Get null working
+  * ~~Get null working~~
   * Implement bytes
   * Byte operators >>, <<, |, &, &^
   * Implement floats

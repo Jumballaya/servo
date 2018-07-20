@@ -29,7 +29,7 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 
 	// Import Expression
 	case *ast.ImportExpression:
-		return evalImportExpression(node.Value, env)
+		return evalImportExpression(node, env)
 
 	// Integer
 	case *ast.IntegerLiteral:
@@ -326,8 +326,8 @@ func evalIdentifier(node *ast.Identifier, env *object.Environment) object.Object
 		return val
 	}
 
-	if node.Value == "json" {
-		return evalJSONExpression()
+	if env.Silent && node.Value == "log" {
+		return NULL
 	}
 
 	if builtin, ok := getBuiltin(node.Value, env); ok {
@@ -417,10 +417,9 @@ func evalHashLiteral(node *ast.HashLiteral, env *object.Environment) object.Obje
 	return &object.Hash{Pairs: pairs}
 }
 
-func evalImportExpression(module string, env *object.Environment) object.Object {
-	split := strings.Split(module, ":")
-	mod := split[0]
-	obj := split[1]
+func evalImportExpression(importExp *ast.ImportExpression, env *object.Environment) object.Object {
+	mod := importExp.Path.String()
+	obj := importExp.Name.String()
 
 	// Open the module's file
 	// Evaluate it

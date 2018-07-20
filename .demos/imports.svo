@@ -1,8 +1,10 @@
 import nums from './arrays.svo';
-import add from './integers.svo';
-import message from './strings.svo'
+import closure from './functions.svo';
+import message from './strings.svo';
 import map from 'Array';
 
+let addTen = closure(10);
 
-log(map(nums, add))
-log(message)
+log(nums);
+log(map(nums, addTen));
+log(message);

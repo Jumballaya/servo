@@ -439,7 +439,41 @@ func (p *Parser) parseComment() ast.Expression {
 }
 
 func (p *Parser) parseImport() ast.Expression {
-	return &ast.ImportExpression{Token: p.curToken, Value: p.curToken.Literal}
+	// token.IMPORT with value 'import'
+	stmt := &ast.ImportExpression{Token: p.curToken, Value: p.curToken.Literal}
+
+	// Check for the identifier e.g. map in `import map from './test.svo';`
+	if !p.expectPeek(token.IDENT) {
+		return nil
+	}
+
+	// Set the name of the import
+	stmt.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+
+	// Make sure the next token is a FROM token
+	if !p.expectPeek(token.FROM) {
+		return nil
+	}
+
+	// Make sure the next token is a string
+	if !p.expectPeek(token.STRING) {
+		return nil
+	}
+
+	// Make sure the string isn't empty
+	if p.curToken.Literal == "" {
+		return nil
+	}
+
+	// Set the path from the string
+	stmt.Path = &ast.StringLiteral{Token: p.curToken, Value: p.curToken.Literal}
+
+	// Check for SEMICOLON
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+
+	return stmt
 }
 
 func (p *Parser) parseNullLiteral() ast.Expression {
