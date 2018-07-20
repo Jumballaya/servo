@@ -426,7 +426,7 @@ func evalImportExpression(importExp *ast.ImportExpression, env *object.Environme
 	// Rip out the identifier that is being imported
 
 	// Comes from a file
-	if strings.HasPrefix(mod, "./") {
+	if strings.HasPrefix(mod, "./") || strings.HasPrefix(mod, "../") || strings.HasPrefix(mod, "/") {
 		var currentFile string
 		if len(os.Args) < 2 {
 			currentFile = os.Args[0]

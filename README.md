@@ -32,16 +32,11 @@ None made so far
   * ~~Single quotes for strings~~
   * ~~String infix operators~~
   * ~~Integer/Boolean infix operators~~
-  * ~~Require function for binding an evaluated file to an identifier~~
-    - Still needs tests
   * ~~Fix comment parsing so quotes and special characters work~~
   * ~~Fix string parsing to include the single quote~~
   * ~~Fix string parsing to escape the special characters like \n \t etc.~~
   * ~~JSON support~~
-  * Add import keyword to import specific identifier objects from a file
-    - ~~basic implementation~~
-    - Pull in from files as well as what is already in the scope
-    - Come up with solution for library files as well as importing files
+  * ~~Add import keyword to import specific identifier objects from a file~~
   * Add simple classes with fields and methods
     - Dot notation `foo.bar`
   * Add a standard library that can be imported into any file.

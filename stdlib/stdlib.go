@@ -20,6 +20,7 @@ var Libs = []string{
 func NewEnvironmentWithLib() *object.Environment {
 	newEnv := object.NewEnvironment()
 	for _, lib := range Libs {
+		// Figure out a common place to put these files
 		currentFile := "./stdlib/.svo/" + lib + ".svo"
 		dir, err := filepath.Abs(currentFile)
 		if err != nil {

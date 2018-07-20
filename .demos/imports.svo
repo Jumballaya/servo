@@ -1,7 +1,7 @@
 import nums from './arrays.svo';
 import closure from './functions.svo';
 import message from './strings.svo';
-import map from 'Array';
+import map from '../stdlib/.svo/Array.svo';
 
 let addTen = closure(10);
 
