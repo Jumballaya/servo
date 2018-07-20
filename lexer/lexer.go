@@ -73,6 +73,8 @@ func (l *Lexer) NextToken() token.Token {
 		tok = newToken(token.SEMICOLON, l.ch)
 	case ',':
 		tok = newToken(token.COMMA, l.ch)
+	case '.':
+		tok = newToken(token.DOT, l.ch)
 	case '(':
 		tok = newToken(token.LPAREN, l.ch)
 	case ')':
@@ -128,7 +130,7 @@ func (l *Lexer) readChar() {
 
 func (l *Lexer) readIdentifier() string {
 	position := l.position
-	for isLetter(l.ch) {
+	for isIdent(l.ch) {
 		l.readChar()
 	}
 	return l.input[position:l.position]
@@ -182,6 +184,10 @@ func newToken(tokenType token.TokenType, ch byte) token.Token {
 
 func isLetter(ch byte) bool {
 	return 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || ch == '_' || ch == '\''
+}
+
+func isIdent(ch byte) bool {
+	return isLetter(ch) || (ch != '.' && isDigit(ch))
 }
 
 func isDigit(ch byte) bool {
