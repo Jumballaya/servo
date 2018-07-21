@@ -53,11 +53,12 @@ const (
 	SHIFTRIGHT    = ">>"
 
 	// Delimiters
-	COMMA     = ","
-	SEMICOLON = ";"
-	COLON     = ":"
-	QMARK     = "?"
-	DOT       = "."
+	COMMA      = ","
+	SEMICOLON  = ";"
+	COLON      = ":"
+	COLONCOLON = "::"
+	QMARK      = "?"
+	DOT        = "."
 
 	LPAREN   = "("
 	RPAREN   = ")"

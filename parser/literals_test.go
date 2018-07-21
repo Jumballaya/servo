@@ -152,7 +152,7 @@ func TestClassLiterals(t *testing.T) {
 		expectedParent     string
 		expectedStatements int
 	}{
-		{"class Example ^ Parent {};", "Example", "Parent", 0},
+		{"class Example::Parent {};", "Example", "Parent", 0},
 		{`class Example {
 	let name = "test";
 	let add = fn(x, y) { x + y };

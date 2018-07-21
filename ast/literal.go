@@ -124,5 +124,5 @@ type ClassLiteral struct {
 func (c *ClassLiteral) expressionNode()      {}
 func (c *ClassLiteral) TokenLiteral() string { return c.Token.Literal }
 func (c *ClassLiteral) String() string {
-	return fmt.Sprintf("class %s ^ %s {...}", c.Name, c.Parent)
+	return fmt.Sprintf("class %s::%s {...}", c.Name, c.Parent)
 }

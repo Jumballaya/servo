@@ -12,7 +12,7 @@ func (p *Parser) parseClassLiteral() ast.Expression {
 		Methods: make(map[string]*ast.FunctionLiteral),
 	}
 
-	if p.peekTokenIs(token.CARROT) {
+	if p.peekTokenIs(token.COLONCOLON) {
 		p.nextToken()
 		if !p.expectPeek(token.IDENT) {
 			return nil
