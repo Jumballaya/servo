@@ -1,6 +1,8 @@
 package parser
 
 import (
+	"fmt"
+
 	"github.com/jumballaya/servo/ast"
 	"github.com/jumballaya/servo/token"
 )
@@ -23,6 +25,8 @@ func (p *Parser) parseHashLiteral() ast.Expression {
 		key := p.parseExpression(LOWEST)
 
 		if !p.expectPeek(token.COLON) {
+			msg := fmt.Sprintf("hash declaration missing ':'")
+			p.errors = append(p.errors, msg)
 			return nil
 		}
 
@@ -31,12 +35,16 @@ func (p *Parser) parseHashLiteral() ast.Expression {
 		hash.Pairs[key] = value
 
 		if !p.peekTokenIs(token.RBRACE) && !p.expectPeek(token.COMMA) {
+			msg := fmt.Sprintf("hash declaration must include ',' or '}'")
+			p.errors = append(p.errors, msg)
 			return nil
 		}
 
 	}
 
 	if !p.expectPeek(token.RBRACE) {
+		msg := fmt.Sprintf("hash declaration must end with '}'")
+		p.errors = append(p.errors, msg)
 		return nil
 	}
 
@@ -52,8 +60,29 @@ func (p *Parser) parseIndexExpression(left ast.Expression) ast.Expression {
 	exp.Index = p.parseExpression(LOWEST)
 
 	if !p.expectPeek(token.RBRACKET) {
+		msg := fmt.Sprintf("index expressions must end with ']'")
+		p.errors = append(p.errors, msg)
 		return nil
 	}
+
+	return exp
+}
+
+// Parse Attribute Expression
+func (p *Parser) parseAttributeExpression(left ast.Expression) ast.Expression {
+	exp := &ast.AttributeExpression{Token: p.curToken, Left: left}
+	p.nextToken()
+	i := p.parseExpression(ASSIGN)
+
+	ident, ok := i.(*ast.Identifier)
+	if !ok {
+		msg := fmt.Sprintf("attribute operator requires an identifier")
+		p.errors = append(p.errors, msg)
+		return nil
+	}
+
+	t := token.Token{Type: token.STRING, Literal: ident.Value}
+	exp.Index = &ast.StringLiteral{Token: t, Value: ident.Value}
 
 	return exp
 }

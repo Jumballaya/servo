@@ -172,3 +172,23 @@ func (as *AssignStatement) String() string {
 	out.WriteByte(';')
 	return out.String()
 }
+
+type AttributeExpression struct {
+	Token token.Token
+	Left  Expression
+	Index *StringLiteral
+}
+
+func (ae *AttributeExpression) expressionNode()      {}
+func (ae *AttributeExpression) TokenLiteral() string { return ae.Token.Literal }
+func (ae *AttributeExpression) String() string {
+	var out bytes.Buffer
+
+	out.WriteString("(")
+	out.WriteString(ae.Left.String())
+	out.WriteString(".")
+	out.WriteString(ae.Index.String())
+	out.WriteString(")")
+
+	return out.String()
+}

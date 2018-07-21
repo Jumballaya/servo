@@ -11,7 +11,7 @@ all: test build
 build:
 	$(GOBUILD) -o dist/$(BINARY_NAME) -v
 test:
-	$(GOTEST) -v ./...
+	$(GOTEST) ./...
 clean:
 	$(GOCLEAN)
 	rm -f $(BINARY_NAME)
