@@ -1,0 +1,36 @@
+###
+##
+#   Classes
+##
+###
+
+class Example {
+  let name = "";
+  let greet = fn() {
+    log("Hello " + this.name);
+  };
+}
+
+let e = new Example;
+e.name = "Name";
+e.greet();
+
+class Greeter::Example {
+  let greet = fn(lang) {
+    let greeting = "";
+    if (lang == "spanish") {
+      greeting = "Hola ";
+    } else if (lang == "french") {
+      greeting = "Bonjour ";
+    } else {
+      greeting = "Hello ";
+    }
+
+    log(greeting + this.name)
+  }
+}
+
+
+let greeter = new Greeter;
+greeter.name = "Name";
+greeter.greet();
