@@ -112,6 +112,7 @@ func TestReassignExpression(t *testing.T) {
 		{"let x = 5; x *= 5; x;", "x"},
 		{"let x = 10; x /= 2; x;", "x"},
 		{`let x = "hello"; x += " world"; x;`, "x"},
+		{`let x = 5; x = "hello"; x`, "x"},
 	}
 
 	for _, tt := range tests {

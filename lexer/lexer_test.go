@@ -60,6 +60,8 @@ null;
 5 ^ 2;
 true && false;
 true || false;
+let test = 5;
+test = "test";
 `
 
 	tests := []struct {
@@ -235,6 +237,15 @@ true || false;
 		{token.TRUE, "true"},
 		{token.OR, "||"},
 		{token.FALSE, "false"},
+		{token.SEMICOLON, ";"},
+		{token.LET, "let"},
+		{token.IDENT, "test"},
+		{token.ASSIGN, "="},
+		{token.INT, "5"},
+		{token.SEMICOLON, ";"},
+		{token.IDENT, "test"},
+		{token.ASSIGN, "="},
+		{token.STRING, "test"},
 		{token.SEMICOLON, ";"},
 		{token.EOF, ""},
 	}

@@ -106,6 +106,8 @@ func (p *Parser) parseReassignExpression(left ast.Expression) ast.Expression {
 		stmt.Value = makeInfix(token.ASTERISK, left, right)
 	case token.SLASHASSIGN:
 		stmt.Value = makeInfix(token.SLASH, left, right)
+	case token.ASSIGN:
+		stmt.Value = p.parseExpression(LOWEST).(ast.Expression)
 	}
 
 	if p.peekTokenIs(token.SEMICOLON) {
