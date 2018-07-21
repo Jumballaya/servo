@@ -63,8 +63,11 @@ type Parser struct {
 	l      *lexer.Lexer
 	errors []string
 
+	lastToken token.Token
 	curToken  token.Token
 	peekToken token.Token
+
+	insertedTokens []token.Token
 
 	prefixParseFns map[token.TokenType]prefixParseFn
 	infixParseFns  map[token.TokenType]infixParseFn
@@ -73,8 +76,9 @@ type Parser struct {
 // New creates a new parser using a given Lexer with tokens
 func New(l *lexer.Lexer) *Parser {
 	p := &Parser{
-		l:      l,
-		errors: []string{},
+		l:              l,
+		errors:         []string{},
+		insertedTokens: make([]token.Token, 0, 5),
 	}
 
 	// Read two tokens so curToken and peekToken are set
@@ -100,6 +104,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.COMMENT, p.parseCommentLiteral)
 	p.registerPrefix(token.IMPORT, p.parseImportStatement)
 	p.registerPrefix(token.NULL, p.parseNullLiteral)
+	p.registerPrefix(token.CLASS, p.parseClassLiteral)
 
 	p.registerInfix(token.PLUS, p.parseInfixExpression)
 	p.registerInfix(token.MINUS, p.parseInfixExpression)
@@ -138,8 +143,25 @@ func (p *Parser) Errors() []string {
 
 // Next Token advances the current and peek token places
 func (p *Parser) nextToken() {
+	p.lastToken = p.curToken
 	p.curToken = p.peekToken
-	p.peekToken = p.l.NextToken()
+	p.advancePeekToken()
+
+	if p.curTokenIs(token.ILLEGAL) {
+		msg := fmt.Sprintf("got illegal token: %s", p.curToken.Literal)
+		p.errors = append(p.errors, msg)
+		p.nextToken()
+	}
+}
+
+// Advance Peek Token
+func (p *Parser) advancePeekToken() {
+	if len(p.insertedTokens) > 0 {
+		p.peekToken = p.insertedTokens[len(p.insertedTokens)-1]
+		p.insertedTokens = p.insertedTokens[:len(p.insertedTokens)-1]
+	} else {
+		p.peekToken = p.l.NextToken()
+	}
 }
 
 // Parse Program is the main parsing function and should be called directly after
@@ -300,4 +322,10 @@ func (p *Parser) registerPrefix(tokenType token.TokenType, fn prefixParseFn) {
 // Register Infix
 func (p *Parser) registerInfix(tokenType token.TokenType, fn infixParseFn) {
 	p.infixParseFns[tokenType] = fn
+}
+
+// Insert Token
+func (p *Parser) insertToken(t token.Token) {
+	p.insertedTokens = append(p.insertedTokens, p.peekToken)
+	p.peekToken = t
 }

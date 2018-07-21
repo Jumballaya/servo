@@ -79,6 +79,8 @@ const (
 	IMPORT   = "IMPORT"
 	FROM     = "FROM"
 	AS       = "AS"
+	CLASS    = "CLASS"
+	NEW      = "NEW"
 )
 
 var keywords = map[string]TokenType{
@@ -94,6 +96,8 @@ var keywords = map[string]TokenType{
 	"import": IMPORT,
 	"from":   FROM,
 	"as":     AS,
+	"class":  CLASS,
+	"new":    NEW,
 	"null":   NULL,
 }
 

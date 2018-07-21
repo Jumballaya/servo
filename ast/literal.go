@@ -2,6 +2,7 @@ package ast
 
 import (
 	"bytes"
+	"fmt"
 	"strings"
 
 	"github.com/jumballaya/servo/token"
@@ -111,3 +112,17 @@ type NullLiteral struct {
 func (n *NullLiteral) expressionNode()      {}
 func (n *NullLiteral) TokenLiteral() string { return n.Token.Literal }
 func (n *NullLiteral) String() string       { return n.Token.Literal }
+
+type ClassLiteral struct {
+	Token   token.Token
+	Name    string
+	Parent  string
+	Fields  []*LetStatement
+	Methods map[string]*FunctionLiteral
+}
+
+func (c *ClassLiteral) expressionNode()      {}
+func (c *ClassLiteral) TokenLiteral() string { return c.Token.Literal }
+func (c *ClassLiteral) String() string {
+	return fmt.Sprintf("class %s ^ %s {...}", c.Name, c.Parent)
+}

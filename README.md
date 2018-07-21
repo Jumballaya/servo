@@ -68,3 +68,4 @@ None made so far
   * Add `import './file.svo' as file` syntax to import
   * Add `import func from './example.svo' as function` syntax to import
   * Change import so it builds the AST during the parsing stage rather than evaluation
+  * Change array index expression to accept colons like `arr[1:3]` for a slice of the array

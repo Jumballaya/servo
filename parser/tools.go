@@ -32,3 +32,10 @@ func (p *Parser) curPrecedence() int {
 	}
 	return LOWEST
 }
+
+func createKeywordToken(k string) token.Token {
+	return token.Token{
+		Type:    token.LookupIdent(k),
+		Literal: k,
+	}
+}

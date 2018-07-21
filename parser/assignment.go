@@ -1,6 +1,8 @@
 package parser
 
 import (
+	"fmt"
+
 	"github.com/jumballaya/servo/ast"
 	"github.com/jumballaya/servo/token"
 )
@@ -16,6 +18,8 @@ func (p *Parser) parseStatement() ast.Statement {
 		return p.parseLetStatement()
 	case token.RETURN:
 		return p.parseReturnStatement()
+	case token.CLASS:
+		return p.parseClassStatement()
 	default:
 		return p.parseExpressionStatement()
 	}
@@ -125,4 +129,36 @@ func makeInfix(t token.TokenType, left, right ast.Expression) *ast.InfixExpressi
 		Operator: string(t),
 		Right:    right,
 	}
+}
+
+// Parse Class Statement
+func (p *Parser) parseClassStatement() ast.Statement {
+	classToken := p.curToken
+	if !p.expectPeek(token.IDENT) {
+		msg := fmt.Sprintf("could not parse %q as an identifier", p.peekToken.Literal)
+		p.errors = append(p.errors, msg)
+		return nil
+	}
+
+	stmt := &ast.LetStatement{Token: createKeywordToken("let")}
+	stmt.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+
+	p.insertToken(classToken)
+	p.nextToken()
+
+	exp, ok := p.parseExpression(LOWEST).(ast.Expression)
+	if !ok {
+		return nil
+	}
+	stmt.Value = exp
+
+	if class, ok := stmt.Value.(*ast.ClassLiteral); ok {
+		class.Name = stmt.Name.String()
+	}
+
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+
+	return stmt
 }

@@ -62,6 +62,11 @@ true && false;
 true || false;
 let test = 5;
 test = "test";
+class Example {
+	"foo": null,
+	"bar": null,
+};
+let e = new Example();
 `
 
 	tests := []struct {
@@ -246,6 +251,27 @@ test = "test";
 		{token.IDENT, "test"},
 		{token.ASSIGN, "="},
 		{token.STRING, "test"},
+		{token.SEMICOLON, ";"},
+		{token.CLASS, "class"},
+		{token.IDENT, "Example"},
+		{token.LBRACE, "{"},
+		{token.STRING, "foo"},
+		{token.COLON, ":"},
+		{token.NULL, "null"},
+		{token.COMMA, ","},
+		{token.STRING, "bar"},
+		{token.COLON, ":"},
+		{token.NULL, "null"},
+		{token.COMMA, ","},
+		{token.RBRACE, "}"},
+		{token.SEMICOLON, ";"},
+		{token.LET, "let"},
+		{token.IDENT, "e"},
+		{token.ASSIGN, "="},
+		{token.NEW, "new"},
+		{token.IDENT, "Example"},
+		{token.LPAREN, "("},
+		{token.RPAREN, ")"},
 		{token.SEMICOLON, ";"},
 		{token.EOF, ""},
 	}
