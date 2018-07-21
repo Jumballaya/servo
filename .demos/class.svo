@@ -5,22 +5,29 @@
 ###
 
 class Example {
-  let name = "";
+  constructor = fn(name) {
+    this.name = name;
+  }
+
   let greet = fn() {
     log("Hello " + this.name);
   };
 }
 
-let e = new Example;
-e.name = "Name";
+let e = new Example("Charles");
 e.greet();
 
 class Greeter::Example {
-  let greet = fn(lang) {
+  constructor = fn(name, lang) {
+    super(name);
+    this.lang = lang;
+  }
+
+  let greet = fn() {
     let greeting = "";
-    if (lang == "spanish") {
+    if (this.lang == "spanish") {
       greeting = "Hola ";
-    } else if (lang == "french") {
+    } else if (this.lang == "french") {
       greeting = "Bonjour ";
     } else {
       greeting = "Hello ";
@@ -31,6 +38,5 @@ class Greeter::Example {
 }
 
 
-let greeter = new Greeter;
-greeter.name = "Name";
+let greeter = new Greeter("Mary", "spanish");
 greeter.greet();
