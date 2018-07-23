@@ -1,6 +1,8 @@
 package evaluator
 
 import (
+	"fmt"
+
 	"github.com/jumballaya/servo/ast"
 	"github.com/jumballaya/servo/object"
 )
@@ -81,4 +83,41 @@ func evalHashIndexExpression(hash, index object.Object) object.Object {
 	}
 
 	return pair.Value
+}
+
+// Eval Attribute Expression
+func evalAttributeExpression(node *ast.AttributeExpression, env *object.Environment) object.Object {
+	left := Eval(node.Left, env)
+	if isError(left) {
+		return left
+	}
+
+	var Left object.Object
+
+	str, ok := node.Left.(*ast.Identifier)
+	if ok {
+		Left, ok = env.Get(str.Value)
+		if !ok {
+			return newError("identifier not found '%s'", str.Value)
+		}
+	} else {
+		Left = left
+	}
+
+	instance, ok := Left.(*object.Instance)
+	if !ok {
+		return newError("left hand side not an instance, type: %T", left)
+	}
+
+	method := instance.GetMethod(node.Index.Value)
+
+	if method == nil {
+		field, ok := instance.Fields.Get(node.Index.Value)
+		if !ok {
+			fmt.Println(fmt.Sprintf("Warning: method or attribute '%s' does not exist on class '%s'", node.Index.Value, instance.Class.Name))
+			return NULL
+		}
+		return field
+	}
+	return method
 }

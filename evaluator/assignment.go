@@ -21,12 +21,20 @@ func evalLetStatement(node *ast.LetStatement, env *object.Environment) object.Ob
 
 // Eval Assignment Statement
 func evalAssignStatement(node *ast.AssignStatement, env *object.Environment) object.Object {
+	var Left ast.Expression
+	attr, ok := node.Left.(*ast.AttributeExpression)
+	if ok {
+		Left = attr.Left
+	} else {
+		Left = node.Left
+	}
+
 	val := Eval(node.Value, env)
 	if isError(val) {
 		return val
 	}
 
-	exp, _ := node.Left.(ast.Expression)
+	exp, _ := Left.(ast.Expression)
 	ident, ok := exp.(*ast.Identifier)
 	if !ok {
 		return newError("left value is not an identifier")

@@ -5,6 +5,7 @@ import (
 
 	"github.com/jumballaya/servo/ast"
 	"github.com/jumballaya/servo/object"
+	"github.com/jumballaya/servo/token"
 )
 
 // Eval Class Literal
@@ -36,10 +37,6 @@ func evalClassLiteral(node *ast.ClassLiteral, env *object.Environment) object.Ob
 
 // Eval New Class Instance
 func evalNewClassInstance(node *ast.NewInstance, env *object.Environment) object.Object {
-	// 1. Get the ast.ClassLiteral out
-	// 2. Get the arguments out and evaluate them
-	// 3. Parse the class, including the constructor with the arguments
-	// 4. Return the instance object
 	ident, ok := node.Class.(*ast.Identifier)
 	if !ok {
 		return newError("cannot create an instance of a class that doesn't exist")
@@ -55,15 +52,21 @@ func evalNewClassInstance(node *ast.NewInstance, env *object.Environment) object
 		return newError("cannot create an instance of a class that doesn't exist")
 	}
 
-	newEnv := object.NewEnvironment()
+	newEnv := object.NewEnclosedEnvironment(env)
 	instance := &object.Instance{Class: classObj, Fields: newEnv}
 	newEnv.Set("this", instance)
-	// Parse the constructor function with the new environment
-	// Add all of the class's fields to the environment as well
+
 	for _, f := range classObj.Fields {
 		name := f.Name.Value
 		evaluated := Eval(f, newEnv)
-		if name != "constructor" {
+		if name == "constructor" {
+			callExp := &ast.CallExpression{
+				Token:     token.Token{Type: token.LPAREN, Literal: "("},
+				Function:  f.Value,
+				Arguments: node.Arguments,
+			}
+			Eval(callExp, newEnv)
+		} else {
 			newEnv.Set(name, evaluated)
 		}
 	}

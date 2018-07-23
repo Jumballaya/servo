@@ -4,21 +4,19 @@
 ##
 ###
 
-class Example {
-  let greet = fn() {
-    log("Hello " + this.place);
-  };
-  let place = "World";
-  let x = "name";
-  let y = 10;
-}
+class Example {}
 
 class Greeter::Example {
+  let name = "";
+  let constructor = fn(name) {
+    this.name = name;
+  }
   let greet = fn() {
     log("Hello " + this.name)
   };
-  let name = "Patrick";
 }
 
-let g = new Greeter();
+let g = new Greeter("Patrick");
 g.greet();
+g.test = 123;
+log(g.test)
