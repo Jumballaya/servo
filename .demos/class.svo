@@ -7,7 +7,6 @@
 class Example {}
 
 class Greeter::Example {
-  let name = "";
   let constructor = fn(name) {
     this.name = name;
   }
