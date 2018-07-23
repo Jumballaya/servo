@@ -113,7 +113,9 @@ func (ce *CallExpression) String() string {
 		args = append(args, a.String())
 	}
 
+	out.WriteString("(")
 	out.WriteString(ce.Function.String())
+	out.WriteString(")")
 	out.WriteString("(")
 	out.WriteString(strings.Join(args, ", "))
 	out.WriteString(")")

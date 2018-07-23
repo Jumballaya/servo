@@ -8,6 +8,7 @@ import (
 
 	"github.com/jumballaya/servo/ast"
 	"github.com/jumballaya/servo/object"
+	"github.com/jumballaya/servo/token"
 )
 
 // Eval Let Statement
@@ -22,12 +23,26 @@ func evalLetStatement(node *ast.LetStatement, env *object.Environment) object.Ob
 // Eval Assignment Statement
 func evalAssignStatement(node *ast.AssignStatement, env *object.Environment) object.Object {
 	var Left ast.Expression
+
+	// Attribute Expression
 	attr, ok := node.Left.(*ast.AttributeExpression)
 	if ok {
-		Left = attr.Left
-	} else {
-		Left = node.Left
+		val := evalAttributeExpression(attr, env)
+		_, ok := val.(*object.Null)
+		// Identifier not set
+		if ok {
+			// Get the instance and its environment
+			// Evaluate it with the instance's environment
+			instance := object.GetSelf(env)
+			ident := &ast.Identifier{Token: token.Token{Type: token.IDENT, Literal: attr.Index.Value}, Value: attr.Index.Value}
+			evaluated := Eval(node.Value, env)
+			instance.Fields.Set(ident.Value, evaluated)
+			return evaluated
+		}
 	}
+
+	// Normal
+	Left = node.Left
 
 	val := Eval(node.Value, env)
 	if isError(val) {

@@ -1,8 +1,6 @@
 package evaluator
 
 import (
-	"fmt"
-
 	"github.com/jumballaya/servo/ast"
 	"github.com/jumballaya/servo/object"
 )
@@ -114,8 +112,11 @@ func evalAttributeExpression(node *ast.AttributeExpression, env *object.Environm
 	if method == nil {
 		field, ok := instance.Fields.Get(node.Index.Value)
 		if !ok {
-			fmt.Println(fmt.Sprintf("Warning: method or attribute '%s' does not exist on class '%s'", node.Index.Value, instance.Class.Name))
-			return NULL
+			field, ok = env.Get(node.Index.Value)
+			if !ok {
+				return NULL
+			}
+			return field
 		}
 		return field
 	}

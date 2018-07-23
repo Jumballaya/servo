@@ -58,16 +58,39 @@ func evalNewClassInstance(node *ast.NewInstance, env *object.Environment) object
 
 	for _, f := range classObj.Fields {
 		name := f.Name.Value
-		evaluated := Eval(f, newEnv)
-		if name == "constructor" {
-			callExp := &ast.CallExpression{
-				Token:     token.Token{Type: token.LPAREN, Literal: "("},
-				Function:  f.Value,
-				Arguments: node.Arguments,
+		switch f.Value.(type) {
+		case *ast.FunctionLiteral:
+			if name == "constructor" {
+				if f.Value != nil {
+					function, _ := f.Value.(*ast.FunctionLiteral)
+					callExp := &ast.CallExpression{
+						Token:     token.Token{Type: token.LPAREN, Literal: "("},
+						Function:  function,
+						Arguments: node.Arguments,
+					}
+					// Fix this
+					eval := evalCallFunction(callExp, newEnv)
+					fmt.Println(fmt.Sprintf("Eval %T", eval))
+					fmt.Println(fmt.Sprintf("Eval %s", eval))
+					name, _ := newEnv.Get("name")
+					fmt.Println(fmt.Sprintf("%T", name))
+					fmt.Println(fmt.Sprintf("%s", name))
+				}
+			} else {
+				evaluated := Eval(f, newEnv)
+				newEnv.Set(name, evaluated)
+				fn, ok := evaluated.(*object.Function)
+				if ok {
+					instance.Class.Methods[name] = fn
+				}
 			}
-			Eval(callExp, newEnv)
-		} else {
+		default:
+			evaluated := Eval(f, newEnv)
 			newEnv.Set(name, evaluated)
+			fn, ok := evaluated.(*object.Function)
+			if ok {
+				instance.Class.Methods[name] = fn
+			}
 		}
 	}
 
