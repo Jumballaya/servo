@@ -46,8 +46,9 @@ func TestClassLiterals(t *testing.T) {
 			t.Fatalf("class name is incorrect. Wanted: %s Got: %s", tt.expectedName, literal.Name)
 		}
 
-		if tt.expectedStatements != (len(literal.Methods) + len(literal.Fields)) {
-			t.Fatalf("class parent is incorrect. Wanted: %s Got: %s", tt.expectedParent, literal.Parent)
+		stmtCount := len(literal.Fields)
+		if tt.expectedStatements != stmtCount {
+			t.Fatalf("incorrect amount of statements. Wanted: %d Got: %d", tt.expectedStatements, stmtCount)
 		}
 	}
 }
