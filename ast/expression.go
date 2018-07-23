@@ -192,3 +192,19 @@ func (ae *AttributeExpression) String() string {
 
 	return out.String()
 }
+
+type NewInstance struct {
+	Class     Expression
+	Arguments []Expression
+}
+
+func (ni *NewInstance) expressionNode()      {}
+func (ni *NewInstance) TokenLiteral() string { return "new" }
+func (ni *NewInstance) String() string {
+	args := []string{}
+	for _, a := range ni.Arguments {
+		args = append(args, a.String())
+	}
+
+	return fmt.Sprintf("new %s(%s)", ni.Class, strings.Join(args, ", "))
+}

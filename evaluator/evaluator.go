@@ -44,6 +44,37 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 	case *ast.HashLiteral:
 		return evalHashLiteral(node, env)
 
+	// Class
+	case *ast.ClassLiteral:
+		return evalClassLiteral(node, env)
+
+	// New Instance
+	case *ast.NewInstance:
+		return evalNewClassInstance(node, env)
+
+	// Attribute Expression
+	case *ast.AttributeExpression:
+		left := Eval(node.Left, env)
+		if isError(left) {
+			return left
+		}
+
+		instance, ok := left.(*object.Instance)
+		if !ok {
+			return newError("left hand side not an instance, type: %T", left)
+		}
+
+		method := instance.GetMethod(node.Index.Value)
+
+		if method == nil {
+			field, ok := instance.Fields.Get(node.Index.Value)
+			if !ok {
+				return newError("method or attribute %s does not exist on class %s", node.Index.Value, instance.Class.Name)
+			}
+			return field
+		}
+		return method
+
 	// Index Expression
 	case *ast.IndexExpression:
 		left := Eval(node.Left, env)

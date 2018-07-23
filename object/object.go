@@ -24,6 +24,8 @@ const (
 	ERROR_OBJ        = "ERROR"
 	FUNCTION_OBJ     = "FUNCTION"
 	BUILTIN_OBJ      = "BUILTIN"
+	CLASS_OBJ        = "CLASS"
+	INSTANCE_OBJ     = "INSTANCE"
 )
 
 type Object interface {
@@ -85,6 +87,7 @@ type Function struct {
 }
 
 func (f *Function) Type() ObjectType { return FUNCTION_OBJ }
+func (f *Function) ClassMethod()     {}
 func (f *Function) Inspect() string {
 	var out bytes.Buffer
 
@@ -122,6 +125,7 @@ type Builtin struct {
 
 func (b *Builtin) Type() ObjectType { return BUILTIN_OBJ }
 func (b *Builtin) Inspect() string  { return "builtin function" }
+func (b *Builtin) ClassMethod()     {}
 
 type Array struct {
 	Elements []Object

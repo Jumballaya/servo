@@ -35,6 +35,7 @@ func (p *Parser) parseClassLiteral() ast.Expression {
 		switch s := let.Value.(type) {
 		case *ast.FunctionLiteral:
 			c.Methods[let.Name.Value] = s
+			c.Fields = append(c.Fields, let)
 		default:
 			c.Fields = append(c.Fields, let)
 		}
@@ -45,4 +46,28 @@ func (p *Parser) parseClassLiteral() ast.Expression {
 	}
 
 	return c
+}
+
+// Parse New Expression
+func (p *Parser) parseNewExpression() ast.Expression {
+	i := &ast.NewInstance{}
+
+	p.nextToken()
+	classExp := p.parseExpression(LOWEST)
+
+	call, ok := classExp.(*ast.CallExpression)
+	if !ok {
+		msg := "invalid class instance creation"
+		p.errors = append(p.errors, msg)
+		return nil
+	}
+
+	i.Class = call.Function
+	i.Arguments = call.Arguments
+
+	if p.peekTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+
+	return i
 }

@@ -88,7 +88,7 @@ func Start(in io.Reader, out io.Writer) {
 	}
 }
 
-func Run(input string, out io.Writer) {
+func Run(input string, out io.Writer, verbose bool) {
 	env := stdlib.NewEnvironmentWithLib()
 	l := lexer.New(input)
 	p := parser.New(l)
@@ -98,7 +98,14 @@ func Run(input string, out io.Writer) {
 		printParserErrors(out, p.Errors())
 	}
 
-	evaluator.Eval(program, env)
+	evaluated := evaluator.Eval(program, env)
+
+	if verbose {
+		if evaluated != nil {
+			io.WriteString(out, evaluated.Inspect())
+			io.WriteString(out, "\n")
+		}
+	}
 }
 
 func printParserErrors(out io.Writer, errors []string) {

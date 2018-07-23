@@ -20,7 +20,7 @@ func main() {
 			return
 		}
 
-		repl.Run(string(file), os.Stdout)
+		repl.Run(string(file), os.Stdout, false)
 	}
 
 }

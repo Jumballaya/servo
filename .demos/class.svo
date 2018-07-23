@@ -5,38 +5,20 @@
 ###
 
 class Example {
-  constructor = fn(name) {
-    this.name = name;
-  }
-
   let greet = fn() {
-    log("Hello " + this.name);
+    log("Hello " + this.place);
   };
+  let place = "World";
+  let x = "name";
+  let y = 10;
 }
-
-let e = new Example("Charles");
-e.greet();
 
 class Greeter::Example {
-  constructor = fn(name, lang) {
-    super(name);
-    this.lang = lang;
-  }
-
   let greet = fn() {
-    let greeting = "";
-    if (this.lang == "spanish") {
-      greeting = "Hola ";
-    } else if (this.lang == "french") {
-      greeting = "Bonjour ";
-    } else {
-      greeting = "Hello ";
-    }
-
-    log(greeting + this.name)
-  }
+    log("Hello " + this.name)
+  };
+  let name = "Patrick";
 }
 
-
-let greeter = new Greeter("Mary", "spanish");
-greeter.greet();
+let g = new Greeter();
+g.greet();
