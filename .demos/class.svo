@@ -4,6 +4,8 @@
 ##
 ###
 
+class Example {};
+
 class Greeter::Example {
   let constructor = fn(name) {
     this.name = name;
