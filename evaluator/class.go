@@ -69,12 +69,7 @@ func evalNewClassInstance(node *ast.NewInstance, env *object.Environment) object
 						Arguments: node.Arguments,
 					}
 					// Fix this
-					eval := evalCallFunction(callExp, newEnv)
-					fmt.Println(fmt.Sprintf("Eval %T", eval))
-					fmt.Println(fmt.Sprintf("Eval %s", eval))
-					name, _ := newEnv.Get("name")
-					fmt.Println(fmt.Sprintf("%T", name))
-					fmt.Println(fmt.Sprintf("%s", name))
+					evalCallFunction(callExp, newEnv)
 				}
 			} else {
 				evaluated := Eval(f, newEnv)

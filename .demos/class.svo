@@ -4,8 +4,6 @@
 ##
 ###
 
-class Example {}
-
 class Greeter::Example {
   let constructor = fn(name) {
     this.name = name;
@@ -17,5 +15,3 @@ class Greeter::Example {
 
 let g = new Greeter("Patrick");
 g.greet();
-g.test = 123;
-log(g.test)

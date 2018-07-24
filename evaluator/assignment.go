@@ -27,18 +27,21 @@ func evalAssignStatement(node *ast.AssignStatement, env *object.Environment) obj
 	// Attribute Expression
 	attr, ok := node.Left.(*ast.AttributeExpression)
 	if ok {
-		val := evalAttributeExpression(attr, env)
+		instance := object.GetSelf(env)
+		val := evalAttributeExpression(attr, instance.Fields)
 		_, ok := val.(*object.Null)
 		// Identifier not set
 		if ok {
-			// Get the instance and its environment
-			// Evaluate it with the instance's environment
-			instance := object.GetSelf(env)
 			ident := &ast.Identifier{Token: token.Token{Type: token.IDENT, Literal: attr.Index.Value}, Value: attr.Index.Value}
 			evaluated := Eval(node.Value, env)
 			instance.Fields.Set(ident.Value, evaluated)
+			env.Set(ident.Value, evaluated)
 			return evaluated
 		}
+
+		instance.Fields.Set(attr.Index.Value, val)
+		env.Set(attr.Index.Value, val)
+		return val
 	}
 
 	// Normal
