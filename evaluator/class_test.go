@@ -50,7 +50,6 @@ func TestNewClassInstance(t *testing.T) {
 func TestClassConstructor(t *testing.T) {
 	input := `
 class Example {
-	let name = "";
 	let constructor = fn(name) {
 		this.name = name;
 	}
@@ -69,30 +68,6 @@ e.greet();`
 
 	if s.Value != "Hello Name" {
 		t.Fatalf("class fields not being set in constructor. Expected: %s, Got: %s", "Hello Name", s.Value)
-	}
-}
-
-func TestClassConstructorNewAttribute(t *testing.T) {
-	input := `
-class Example {
-	let constructor = fn(name) {
-		this.name = name;
-	}
-	let greet = fn() {
-		"Hello " + this.name;
-	};
-};
-let e = new Example("Name");
-e.greet();`
-
-	evaluated := testEval(input)
-	i, ok := evaluated.(*object.String)
-	if !ok {
-		t.Fatalf("object from e.greet() is not string. got=%T (%+v)", evaluated, evaluated)
-	}
-
-	if i.Value != "Hello Name" {
-		t.Fatalf("class fields not being set in constructor")
 	}
 }
 
@@ -118,9 +93,15 @@ class Greeter::Example {
 };
 
 let g = new Greeter("Name");
-g.greet();
 g.welcome();
 `
-	testEval(input)
-	t.Fatalf("Not tested")
+	evaluated := testEval(input)
+	s, ok := evaluated.(*object.String)
+	if !ok {
+		t.Fatalf("object from e.greet() is not string. got=%T (%+v)", evaluated, evaluated)
+	}
+
+	if s.Value != "Welcome Name" {
+		t.Fatalf("class fields not being set in constructor. Expected: %s, Got: %s", "Hello Name", s.Value)
+	}
 }
