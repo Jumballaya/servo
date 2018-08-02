@@ -41,8 +41,7 @@ None made so far
   * ~~Automatic semicolon insertion~~
   * ~~Increment/Decremnt by operators += , -= , \*= , \=~~
   * ~~Power operator ^~~
-  * Add simple classes with fields and methods
-    - Dot notation `foo.bar`
+  * ~~Add simple classes with fields and methods and inheritance~~
   * Add a standard library that can be imported into any file.
     - ~~Basic support~~
     - Standard lib files can be imported by itself (aka `import map from 'Array';`) and without extension
