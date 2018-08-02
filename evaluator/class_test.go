@@ -74,25 +74,26 @@ e.greet();`
 func TestClassInheritance(t *testing.T) {
 	input := `
 class Example {
-	let constructor = fn(name) {
-		this.name = name;
+	let constructor = fn(firstname, lastname) {
+		this.firstname = firstname;
+		this.lastname = lastname;
 	}
 	let greet = fn() {
-		"Hello " + this.name;
+		"Hello " + this.firstname + " " + this.lastname;
 	};
 };
 
 class Greeter::Example {
-	let constructor = fn(name) {
-		super(name);
+	let constructor = fn(firstname, lastname) {
+		super(firstname, lastname);
 	}
 
 	let welcome = fn() {
-		"Welcome " + this.name;
+		"Welcome " + this.firstname + " " + this.lastname;
 	}
 };
 
-let g = new Greeter("Name");
+let g = new Greeter("Firstname", "Lastname");
 g.welcome();
 `
 	evaluated := testEval(input)
@@ -101,7 +102,7 @@ g.welcome();
 		t.Fatalf("object from e.greet() is not string. got=%T (%+v)", evaluated, evaluated)
 	}
 
-	if s.Value != "Welcome Name" {
+	if s.Value != "Welcome Firstname Lastname" {
 		t.Fatalf("class fields not being set in constructor. Expected: %s, Got: %s", "Hello Name", s.Value)
 	}
 }
