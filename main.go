@@ -8,11 +8,11 @@ import (
 	"github.com/jumballaya/servo/repl"
 )
 
-func main() {
-	if len(os.Args) == 1 {
+func run(fromFile bool, config *repl.Config) {
+	if fromFile {
 		fmt.Printf("Hello! This is the Servo programming language!\n")
 		fmt.Printf("Feel free to type commands\n")
-		repl.Start(os.Stdin, os.Stdout)
+		repl.Start(os.Stdin, os.Stdout, config)
 	} else {
 		file, err := ioutil.ReadFile(os.Args[1])
 		if err != nil {
@@ -20,7 +20,11 @@ func main() {
 			return
 		}
 
-		repl.Run(string(file), os.Stdout, false)
+		repl.Run(string(file), os.Stdout, config)
 	}
+}
 
+func main() {
+	config := &repl.Config{Verbose: true}
+	run(len(os.Args) > 0, config)
 }

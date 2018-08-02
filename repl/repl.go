@@ -13,50 +13,7 @@ import (
 
 const PROMPT = ">> "
 
-type History struct {
-	Current int
-	History []string
-}
-
-func NewHistory() *History {
-	return &History{Current: 0, History: []string{""}}
-}
-
-func (h *History) Back() {
-	length := len(h.History)
-	if h.Current < 0 || h.Current > length-1 {
-		h.Current = 0
-		return
-	}
-
-	h.Current--
-}
-
-func (h *History) Forward() {
-	length := len(h.History)
-	if h.Current < 0 {
-		h.Current = 0
-		return
-	}
-	if h.Current > length-1 {
-		h.Current = length - 1
-		return
-	}
-
-	h.Current += 1
-}
-
-func (h *History) CurrentInput() string {
-	return h.History[h.Current]
-}
-
-func (h *History) Insert(command string) {
-	h.History[h.Current] = command
-	h.Current = len(h.History) + 1
-	h.History = append(h.History, "")
-}
-
-func Start(in io.Reader, out io.Writer) {
+func Start(in io.Reader, out io.Writer, config *Config) {
 	scanner := bufio.NewScanner(in)
 	env := stdlib.NewEnvironmentWithLib()
 	//history := NewHistory()
@@ -81,14 +38,16 @@ func Start(in io.Reader, out io.Writer) {
 		}
 
 		evaluated := evaluator.Eval(program, env)
-		if evaluated != nil {
-			io.WriteString(out, evaluated.Inspect())
-			io.WriteString(out, "\n")
+		if config.Verbose {
+			if evaluated != nil {
+				io.WriteString(out, evaluated.Inspect())
+				io.WriteString(out, "\n")
+			}
 		}
 	}
 }
 
-func Run(input string, out io.Writer, verbose bool) {
+func Run(input string, out io.Writer, config *Config) {
 	env := stdlib.NewEnvironmentWithLib()
 	l := lexer.New(input)
 	p := parser.New(l)
@@ -100,7 +59,7 @@ func Run(input string, out io.Writer, verbose bool) {
 
 	evaluated := evaluator.Eval(program, env)
 
-	if verbose {
+	if config.Verbose {
 		if evaluated != nil {
 			io.WriteString(out, evaluated.Inspect())
 			io.WriteString(out, "\n")

@@ -1,7 +1,9 @@
 package evaluator
 
 import (
+	"fmt"
 	"math"
+	"strconv"
 
 	"github.com/jumballaya/servo/object"
 )
@@ -25,6 +27,8 @@ func evalInfixExpression(operator string, left, right object.Object) object.Obje
 		return evalIntegerInfixExpression(operator, left, right)
 	case left.Type() == object.STRING_OBJ && right.Type() == object.STRING_OBJ:
 		return evalStringInfixExpression(operator, left, right)
+	case (left.Type() == object.STRING_OBJ || left.Type() == object.INTEGER_OBJ) && (right.Type() == object.STRING_OBJ || right.Type() == object.INTEGER_OBJ) && operator == "+":
+		return evalMixStringIntegerInfixExpression(operator, left, right)
 	case operator == "==":
 		return nativeBooleanToBooleanObject(left == right)
 	case operator == "!=":
@@ -144,4 +148,25 @@ func evalStringInfixExpression(operator string, left, right object.Object) objec
 	default:
 		return newError("unknown operator: %s %s %s", left.Type(), operator, right.Type())
 	}
+}
+
+func evalMixStringIntegerInfixExpression(operator string, left, right object.Object) object.Object {
+	leftValue := ""
+	rightValue := ""
+
+	switch left.(type) {
+	case *object.Integer:
+		leftValue = strconv.FormatInt(left.(*object.Integer).Value, 10)
+	case *object.String:
+		leftValue = left.(*object.String).Value
+	}
+
+	switch right.(type) {
+	case *object.Integer:
+		rightValue = strconv.FormatInt(right.(*object.Integer).Value, 10)
+	case *object.String:
+		rightValue = right.(*object.String).Value
+	}
+
+	return &object.String{Value: fmt.Sprintf("%s%s", leftValue, rightValue)}
 }
