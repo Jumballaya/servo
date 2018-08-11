@@ -8,6 +8,15 @@ import (
 	"github.com/jumballaya/servo/token"
 )
 
+type Identifier struct {
+	Token token.Token
+	Value string
+}
+
+func (i *Identifier) expressionNode()      {}
+func (i *Identifier) TokenLiteral() string { return i.Token.Literal }
+func (i *Identifier) String() string       { return i.Value }
+
 type StringLiteral struct {
 	Token token.Token
 	Value string
@@ -114,14 +123,14 @@ func (fl *FunctionLiteral) String() string {
 	return out.String()
 }
 
-type Boolean struct {
+type BooleanLiteral struct {
 	Token token.Token
 	Value bool
 }
 
-func (b *Boolean) expressionNode()      {}
-func (b *Boolean) TokenLiteral() string { return b.Token.Literal }
-func (b *Boolean) String() string       { return b.Token.Literal }
+func (b *BooleanLiteral) expressionNode()      {}
+func (b *BooleanLiteral) TokenLiteral() string { return b.Token.Literal }
+func (b *BooleanLiteral) String() string       { return b.Token.Literal }
 
 type NullLiteral struct {
 	Token token.Token
@@ -143,4 +152,20 @@ func (c *ClassLiteral) expressionNode()      {}
 func (c *ClassLiteral) TokenLiteral() string { return c.Token.Literal }
 func (c *ClassLiteral) String() string {
 	return fmt.Sprintf("class %s::%s {...}", c.Name, c.Parent)
+}
+
+type InstanceLiteral struct {
+	Class     Expression
+	Arguments []Expression
+}
+
+func (il *InstanceLiteral) expressionNode()      {}
+func (il *InstanceLiteral) TokenLiteral() string { return "new" }
+func (il *InstanceLiteral) String() string {
+	args := []string{}
+	for _, a := range il.Arguments {
+		args = append(args, a.String())
+	}
+
+	return fmt.Sprintf("new %s(%s)", il.Class, strings.Join(args, ", "))
 }

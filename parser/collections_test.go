@@ -151,7 +151,7 @@ func TestParsingHashLiteralsBooleanKeys(t *testing.T) {
 	}
 
 	for key, value := range hash.Pairs {
-		boolean, ok := key.(*ast.Boolean)
+		boolean, ok := key.(*ast.BooleanLiteral)
 		if !ok {
 			t.Errorf("key is not ast.BooleanLiteral. got=%T", key)
 			continue

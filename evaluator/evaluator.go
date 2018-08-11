@@ -33,7 +33,7 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		return evalFloatLiteral(node, env)
 
 	// Boolean
-	case *ast.Boolean:
+	case *ast.BooleanLiteral:
 		return nativeBooleanToBooleanObject(node.Value)
 
 	// String
@@ -53,7 +53,7 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		return evalClassLiteral(node, env)
 
 	// New Instance
-	case *ast.NewInstance:
+	case *ast.InstanceLiteral:
 		return evalNewClassInstance(node, env)
 
 	// Attribute Expression
@@ -111,8 +111,8 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		return evalLetStatement(node, env)
 
 	// Assignment
-	case *ast.AssignStatement:
-		return evalAssignStatement(node, env)
+	case *ast.AssignExpression:
+		return evalAssignExpression(node, env)
 
 	// Identifier
 	case *ast.Identifier:

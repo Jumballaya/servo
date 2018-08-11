@@ -126,7 +126,7 @@ func TestBooleanExpression(t *testing.T) {
 				program.Statements[0])
 		}
 
-		boolean, ok := stmt.Expression.(*ast.Boolean)
+		boolean, ok := stmt.Expression.(*ast.BooleanLiteral)
 		if !ok {
 			t.Fatalf("exp not *ast.Boolean. got=%T", stmt.Expression)
 		}

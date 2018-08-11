@@ -97,7 +97,7 @@ func (p *Parser) parseImportStatement() ast.Expression {
 // Parse Reassign takes a reassignment operator like `[identifier] += value` and turns it into
 // a brand new assignment expression
 func (p *Parser) parseReassignExpression(left ast.Expression) ast.Expression {
-	stmt := &ast.AssignStatement{Token: p.curToken, Left: left}
+	stmt := &ast.AssignExpression{Token: p.curToken, Left: left}
 	p.nextToken()
 	right := p.parseExpression(LOWEST).(ast.Expression)
 

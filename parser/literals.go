@@ -45,7 +45,7 @@ func (p *Parser) parseStringLiteral() ast.Expression {
 
 // Parse Boolean Literal
 func (p *Parser) parseBooleanLiteral() ast.Expression {
-	return &ast.Boolean{
+	return &ast.BooleanLiteral{
 		Token: p.curToken,
 		Value: p.curTokenIs(token.TRUE),
 	}

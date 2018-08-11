@@ -50,6 +50,9 @@ None made so far
   * Add error messages to the Parser where nil is returned
   * Rename structs/interfaces/functions to their proper names (Expression vs Statement etc.) so everything is consistent
   * Implement bytes
+    - Syntax: `b{'|"}hello world{'|"}` or `b{"|'}h{"|'}`
+    - Like strings they can be concatontated with the `+` operator like `b'h' + b'i' = b'hi'`
+    - Both a single byte and a byte buffer, e.g. `b'hi' = [b'h', b'i']`
   * Rewrite lexer/parser to use runes
   * Multiline Comments /\* \*/
   * String escaping e.g. `\\b` or `"\"hello\""`

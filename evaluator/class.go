@@ -36,7 +36,7 @@ func evalClassLiteral(node *ast.ClassLiteral, env *object.Environment) object.Ob
 }
 
 // Eval New Class Instance
-func evalNewClassInstance(node *ast.NewInstance, env *object.Environment) object.Object {
+func evalNewClassInstance(node *ast.InstanceLiteral, env *object.Environment) object.Object {
 	ident, ok := node.Class.(*ast.Identifier)
 	if !ok {
 		return newError("cannot create an instance of a class that doesn't exist")

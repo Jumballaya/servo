@@ -50,7 +50,7 @@ func (p *Parser) parseClassLiteral() ast.Expression {
 
 // Parse New Expression
 func (p *Parser) parseNewExpression() ast.Expression {
-	i := &ast.NewInstance{}
+	i := &ast.InstanceLiteral{}
 
 	p.nextToken()
 	classExp := p.parseExpression(LOWEST)

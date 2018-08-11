@@ -2,7 +2,6 @@ package evaluator
 
 import (
 	"fmt"
-	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -138,7 +137,7 @@ var builtins = map[string]*object.Builtin{
 	"server": &object.Builtin{
 		Fn: func(args ...object.Object) object.Object {
 			handler := func(w http.ResponseWriter, r *http.Request) {
-				io.WriteString(w, "<h1>Hello World</h1>")
+				fmt.Fprintf(w, "<h1>Hello World</h1>")
 			}
 
 			http.HandleFunc("/", handler)

@@ -21,7 +21,7 @@ func evalLetStatement(node *ast.LetStatement, env *object.Environment) object.Ob
 }
 
 // Eval Assignment Statement
-func evalAssignStatement(node *ast.AssignStatement, env *object.Environment) object.Object {
+func evalAssignExpression(node *ast.AssignExpression, env *object.Environment) object.Object {
 	var Left ast.Expression
 
 	// Attribute Expression
