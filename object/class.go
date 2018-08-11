@@ -22,6 +22,7 @@ func (c *Class) Inspect() string  { return "class " + c.Name }
 func (c *Class) Type() ObjectType { return CLASS_OBJ }
 func (c *Class) GetMethod(name string) ClassMethod {
 	m, ok := c.Methods[name]
+
 	if ok || c.Parent == nil {
 		return m
 	}

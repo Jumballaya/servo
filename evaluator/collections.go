@@ -116,9 +116,18 @@ func evalAttributeExpression(node *ast.AttributeExpression, env *object.Environm
 			if !ok {
 				return NULL
 			}
-			return field
+			return wrapInstanceEnvironment(field, instance.Fields)
 		}
-		return field
+		return wrapInstanceEnvironment(field, instance.Fields)
 	}
-	return method
+	return wrapInstanceEnvironment(method, instance.Fields)
+}
+
+func wrapInstanceEnvironment(obj object.Object, env *object.Environment) object.Object {
+	fn, ok := obj.(*object.Function)
+	if ok {
+		fn.Env = env
+		return fn
+	}
+	return obj
 }

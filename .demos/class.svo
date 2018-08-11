@@ -4,16 +4,52 @@
 ##
 ###
 
-class Example {};
-
-class Greeter::Example {
-  let constructor = fn(name) {
-    this.name = name;
+class Vehicle {
+  let constructor = fn(make, model, wheels) {
+    this.make = make;
+    this.model = model;
+    this.wheels = wheels;
+    this.windows = false;
   }
-  let greet = fn() {
-    log("Hello " + this.name)
-  };
+  let drive = fn() {
+    log("I am driving on " + this.wheels + " wheels!");
+    if (this.windows) {
+      log("And I got my windows down!");
+    }
+  }
 }
 
-let g = new Greeter("Patrick");
-g.greet();
+class Car::Vehicle {
+  let constructor = fn(make, model, wheels) {
+    super(make, model, wheels);
+    this.windows = true;
+  }
+  let honk = fn() {
+    log("Honk, Honk!");
+  }
+}
+
+class FlyingCar::Car {
+  let constructor = fn(make, model, wheels, color) {
+    super(make, model, wheels);
+    this.windows = false;
+    this.color = color;
+  }
+  let changeColor = fn(color) {
+    this.color = color;
+    color;
+  }
+  let drive = fn() {
+    log("Warning: This vehicle does not drive! Try using fly");
+  }
+  let fly = fn() {
+    log("Where were going, we dont need roads.")
+  }
+}
+
+let focus = new Car("ford", "focus", 4);
+focus.drive();
+focus.honk();
+log("My car is a " + focus.make + " " + focus.model);
+
+let flyFocus = new FlyingCar("ford", "flying focus", 0, "red");

@@ -30,6 +30,19 @@ func evalClassLiteral(node *ast.ClassLiteral, env *object.Environment) object.Ob
 		Fields:  node.Fields,
 		Methods: make(map[string]object.ClassMethod),
 	}
+
+	for _, field := range node.Fields {
+		encEnv := object.NewEnclosedEnvironment(env)
+		ident := field.Name.Value
+		this := &object.Instance{Class: class, Fields: encEnv}
+		encEnv.Set("this", this)
+		eval := Eval(field, encEnv)
+		fn, ok := eval.(*object.Function)
+		if ok {
+			class.Methods[ident] = fn
+		}
+	}
+
 	env.Set(node.Name, class)
 
 	return class
@@ -55,8 +68,6 @@ func evalNewClassInstance(node *ast.InstanceLiteral, env *object.Environment) ob
 	newEnv := object.NewEnclosedEnvironment(env)
 	instance := &object.Instance{Class: classObj, Fields: newEnv}
 	if instance.Class.Parent != nil {
-		//superFn := instance.Class.Parent.GetMethod("constructor")
-		//fmt.Println(superFn)
 		for _, stmt := range instance.Class.Parent.Fields {
 			if stmt.Name.Value == "constructor" {
 				superFn := evalLetStatement(stmt, newEnv)

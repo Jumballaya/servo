@@ -9,7 +9,7 @@ import (
 )
 
 func run(fromFile bool, config *repl.Config) {
-	if fromFile {
+	if !fromFile {
 		fmt.Printf("Hello! This is the Servo programming language!\n")
 		fmt.Printf("Feel free to type commands\n")
 		repl.Start(os.Stdin, os.Stdout, config)
@@ -19,12 +19,11 @@ func run(fromFile bool, config *repl.Config) {
 			fmt.Printf("Error has occured: %q", err)
 			return
 		}
-
 		repl.Run(string(file), os.Stdout, config)
 	}
 }
 
 func main() {
 	config := &repl.Config{Verbose: true}
-	run(len(os.Args) > 0, config)
+	run(len(os.Args) > 1, config)
 }
