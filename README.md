@@ -41,6 +41,7 @@ None made so far
   * ~~Automatic semicolon insertion~~
   * ~~Increment/Decremnt by operators += , -= , \*= , \=~~
   * ~~Power operator ^~~
+  * ~~Implement floats~~
   * ~~Add simple classes with fields and methods and inheritance~~
   * Add a standard library that can be imported into any file.
     - ~~Basic support~~
@@ -49,7 +50,6 @@ None made so far
   * Add error messages to the Parser where nil is returned
   * Rename structs/interfaces/functions to their proper names (Expression vs Statement etc.) so everything is consistent
   * Implement bytes
-  * Implement floats
   * Rewrite lexer/parser to use runes
   * Multiline Comments /\* \*/
   * String escaping e.g. `\\b` or `"\"hello\""`

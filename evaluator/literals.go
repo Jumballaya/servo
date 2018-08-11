@@ -35,6 +35,11 @@ func evalIntegerLiteral(node *ast.IntegerLiteral, env *object.Environment) objec
 	return &object.Integer{Value: node.Value}
 }
 
+// Eval Integer Literal
+func evalFloatLiteral(node *ast.FloatLiteral, env *object.Environment) object.Object {
+	return &object.Float{Value: node.Value}
+}
+
 // Native Boolean To Boolean Object returns the singletons TRUE and FALSE of type object.Boolean
 // from the native go true and false
 func nativeBooleanToBooleanObject(val bool) *object.Boolean {

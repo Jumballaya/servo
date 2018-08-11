@@ -13,6 +13,8 @@ import map from 'Array';
 let important = 'important';
 important;
 
+let pi = 3.1415;
+
 let five = 5;
 let ten = 10;
 let none = null;
@@ -84,6 +86,11 @@ let e = new Example();
 		{token.STRING, "important"},
 		{token.SEMICOLON, ";"},
 		{token.IDENT, "important"},
+		{token.SEMICOLON, ";"},
+		{token.LET, "let"},
+		{token.IDENT, "pi"},
+		{token.ASSIGN, "="},
+		{token.FLOAT, "3.1415"},
 		{token.SEMICOLON, ";"},
 		{token.LET, "let"},
 		{token.IDENT, "five"},

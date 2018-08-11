@@ -28,6 +28,10 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 	case *ast.IntegerLiteral:
 		return evalIntegerLiteral(node, env)
 
+	// Float
+	case *ast.FloatLiteral:
+		return evalFloatLiteral(node, env)
+
 	// Boolean
 	case *ast.Boolean:
 		return nativeBooleanToBooleanObject(node.Value)

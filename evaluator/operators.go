@@ -25,9 +25,11 @@ func evalInfixExpression(operator string, left, right object.Object) object.Obje
 	switch {
 	case left.Type() == object.INTEGER_OBJ && right.Type() == object.INTEGER_OBJ:
 		return evalIntegerInfixExpression(operator, left, right)
+	case isNumber(left.Type()) && isNumber(right.Type()):
+		return evalFloatInfixExpression(operator, left, right)
 	case left.Type() == object.STRING_OBJ && right.Type() == object.STRING_OBJ:
 		return evalStringInfixExpression(operator, left, right)
-	case (left.Type() == object.STRING_OBJ || left.Type() == object.INTEGER_OBJ) && (right.Type() == object.STRING_OBJ || right.Type() == object.INTEGER_OBJ) && operator == "+":
+	case (left.Type() == object.STRING_OBJ || isNumber(left.Type())) && (right.Type() == object.STRING_OBJ || isNumber(right.Type())) && operator == "+":
 		return evalMixStringIntegerInfixExpression(operator, left, right)
 	case operator == "==":
 		return nativeBooleanToBooleanObject(left == right)
@@ -42,6 +44,10 @@ func evalInfixExpression(operator string, left, right object.Object) object.Obje
 	default:
 		return newError("unknown operator: %s %s %s", left.Type(), operator, right.Type())
 	}
+}
+
+func isNumber(obj object.ObjectType) bool {
+	return obj == object.INTEGER_OBJ || obj == object.FLOAT_OBJ
 }
 
 // Eval Boolean Infix Expression
@@ -81,12 +87,14 @@ func evalBangOperatorExpression(right object.Object) object.Object {
 
 // Eval Minus Prefix Operator Expression
 func evalMinusPrefixOperatorExpression(right object.Object) object.Object {
-	if right.Type() != object.INTEGER_OBJ {
-		return newError("unknown operator: -%s", right.Type())
+	if right.Type() == object.INTEGER_OBJ {
+		value := right.(*object.Integer).Value
+		return &object.Integer{Value: -value}
+	} else if right.Type() == object.FLOAT_OBJ {
+		value := right.(*object.Float).Value
+		return &object.Float{Value: -value}
 	}
-
-	value := right.(*object.Integer).Value
-	return &object.Integer{Value: -value}
+	return newError("unknown operator: -%s", right.Type())
 }
 
 // Eval Integer Infix Expression
@@ -134,6 +142,51 @@ func evalIntegerInfixExpression(operator string, left, right object.Object) obje
 	}
 }
 
+func evalFloatInfixExpression(operator string, left, right object.Object) object.Object {
+	var leftVal float64
+	var rightVal float64
+	l, ok := left.(*object.Float)
+	if ok {
+		leftVal = l.Value
+	} else {
+		leftVal = float64(left.(*object.Integer).Value)
+	}
+
+	r, ok := right.(*object.Float)
+	if ok {
+		rightVal = r.Value
+	} else {
+		rightVal = float64(right.(*object.Integer).Value)
+	}
+
+	switch operator {
+	case "+":
+		return &object.Float{Value: leftVal + rightVal}
+	case "-":
+		return &object.Float{Value: leftVal - rightVal}
+	case "*":
+		return &object.Float{Value: leftVal * rightVal}
+	case "/":
+		return &object.Float{Value: leftVal / rightVal}
+	case "<":
+		return nativeBooleanToBooleanObject(leftVal < rightVal)
+	case ">":
+		return nativeBooleanToBooleanObject(leftVal > rightVal)
+	case ">=":
+		return nativeBooleanToBooleanObject(leftVal >= rightVal)
+	case "<=":
+		return nativeBooleanToBooleanObject(leftVal <= rightVal)
+	case "==":
+		return nativeBooleanToBooleanObject(leftVal == rightVal)
+	case "!=":
+		return nativeBooleanToBooleanObject(leftVal != rightVal)
+	case "^":
+		return &object.Float{Value: math.Pow(leftVal, rightVal)}
+	default:
+		return newError("unknown operator: %s %s %s", left.Type(), operator, right.Type())
+	}
+}
+
 // Eval String Infix Expression
 func evalStringInfixExpression(operator string, left, right object.Object) object.Object {
 	leftVal := left.(*object.String).Value
@@ -159,6 +212,8 @@ func evalMixStringIntegerInfixExpression(operator string, left, right object.Obj
 		leftValue = strconv.FormatInt(left.(*object.Integer).Value, 10)
 	case *object.String:
 		leftValue = left.(*object.String).Value
+	case *object.Float:
+		leftValue = strconv.FormatFloat(left.(*object.Float).Value, 'f', -1, 64)
 	}
 
 	switch right.(type) {
@@ -166,6 +221,8 @@ func evalMixStringIntegerInfixExpression(operator string, left, right object.Obj
 		rightValue = strconv.FormatInt(right.(*object.Integer).Value, 10)
 	case *object.String:
 		rightValue = right.(*object.String).Value
+	case *object.Float:
+		rightValue = strconv.FormatFloat(right.(*object.Float).Value, 'f', -1, 64)
 	}
 
 	return &object.String{Value: fmt.Sprintf("%s%s", leftValue, rightValue)}

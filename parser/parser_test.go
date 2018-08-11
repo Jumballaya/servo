@@ -77,6 +77,8 @@ func testLiteralExpression(
 	switch v := expected.(type) {
 	case int:
 		return testIntegerLiteral(t, exp, int64(v))
+	case float64:
+		return testFloatLiteral(t, exp, v)
 	case int64:
 		return testIntegerLiteral(t, exp, v)
 	case string:
@@ -106,6 +108,28 @@ func testIntegerLiteral(t *testing.T, il ast.Expression, value int64) bool {
 	if integ.TokenLiteral() != fmt.Sprintf("%d", value) {
 		t.Errorf("integ.TokenLiteral not %d. got=%s", value,
 			integ.TokenLiteral())
+		return false
+	}
+
+	return true
+}
+
+func testFloatLiteral(t *testing.T, il ast.Expression, value float64) bool {
+	t.Helper()
+	fl, ok := il.(*ast.FloatLiteral)
+	if !ok {
+		t.Errorf("expression not *ast.FloatLiteral. got=%T", il)
+		return false
+	}
+
+	if fl.Value != value {
+		t.Errorf("integ.Value not %f. got=%f", value, fl.Value)
+		return false
+	}
+
+	if fl.TokenLiteral() != fmt.Sprintf("%f", value) {
+		t.Errorf("integ.FloatLiteral not %f. got=%s", value,
+			fl.TokenLiteral())
 		return false
 	}
 
