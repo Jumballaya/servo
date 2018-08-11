@@ -43,12 +43,12 @@ None made so far
   * ~~Power operator ^~~
   * ~~Implement floats~~
   * ~~Add simple classes with fields and methods and inheritance~~
+  * ~~Rename structs/interfaces/functions to their proper names (Expression vs Statement etc.) so everything is consistent~~
+  * Add instanceof operator for classes, e.g. `fooInstance instanceof FooClass`
   * Add a standard library that can be imported into any file.
     - ~~Basic support~~
     - Standard lib files can be imported by itself (aka `import map from 'Array';`) and without extension
     - Any other files have to be a relative path or absolute path to the file to import (aka `import func from './module.svo';`) and must have the file extension
-  * Add error messages to the Parser where nil is returned
-  * Rename structs/interfaces/functions to their proper names (Expression vs Statement etc.) so everything is consistent
   * Implement bytes
     - Syntax: `b{'|"}hello world{'|"}` or `b{"|'}h{"|'}`
     - Like strings they can be concatontated with the `+` operator like `b'h' + b'i' = b'hi'`

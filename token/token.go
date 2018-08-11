@@ -69,38 +69,40 @@ const (
 	RBRACKET = "]"
 
 	// Keywords
-	FUNCTION = "FUNCTION"
-	LET      = "LET"
-	TRUE     = "TRUE"
-	FALSE    = "FALSE"
-	IF       = "IF"
-	ELSE     = "ELSE"
-	FOR      = "FOR"
-	IN       = "IN"
-	RETURN   = "RETURN"
-	IMPORT   = "IMPORT"
-	FROM     = "FROM"
-	AS       = "AS"
-	CLASS    = "CLASS"
-	NEW      = "NEW"
+	FUNCTION   = "FUNCTION"
+	LET        = "LET"
+	TRUE       = "TRUE"
+	FALSE      = "FALSE"
+	IF         = "IF"
+	ELSE       = "ELSE"
+	FOR        = "FOR"
+	IN         = "IN"
+	RETURN     = "RETURN"
+	IMPORT     = "IMPORT"
+	FROM       = "FROM"
+	AS         = "AS"
+	CLASS      = "CLASS"
+	NEW        = "NEW"
+	INSTANCEOF = "INSTANCEOF"
 )
 
 var keywords = map[string]TokenType{
-	"fn":     FUNCTION,
-	"let":    LET,
-	"true":   TRUE,
-	"false":  FALSE,
-	"if":     IF,
-	"else":   ELSE,
-	"for":    FOR,
-	"in":     IN,
-	"return": RETURN,
-	"import": IMPORT,
-	"from":   FROM,
-	"as":     AS,
-	"class":  CLASS,
-	"new":    NEW,
-	"null":   NULL,
+	"fn":         FUNCTION,
+	"let":        LET,
+	"true":       TRUE,
+	"false":      FALSE,
+	"if":         IF,
+	"else":       ELSE,
+	"for":        FOR,
+	"in":         IN,
+	"return":     RETURN,
+	"import":     IMPORT,
+	"from":       FROM,
+	"as":         AS,
+	"class":      CLASS,
+	"new":        NEW,
+	"null":       NULL,
+	"instanceof": INSTANCEOF,
 }
 
 // LookupIdent finds the equivalent constant for a given identifier
