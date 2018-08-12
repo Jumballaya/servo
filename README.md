@@ -44,7 +44,7 @@ None made so far
   * ~~Implement floats~~
   * ~~Add simple classes with fields and methods and inheritance~~
   * ~~Rename structs/interfaces/functions to their proper names (Expression vs Statement etc.) so everything is consistent~~
-  * Add instanceof operator for classes, e.g. `fooInstance instanceof FooClass`
+  * ~~Add instanceof operator for classes, e.g. `fooInstance instanceof FooClass`~~
   * Implement bytes
     - Syntax: `b{'|"}hello world{'|"}` or `b{"|'}h{"|'}`
     - Like strings they can be concatontated with the `+` operator like `b'h' + b'i' = b'hi'`
