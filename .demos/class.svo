@@ -53,3 +53,7 @@ focus.honk();
 log("My car is a " + focus.make + " " + focus.model);
 
 let flyFocus = new FlyingCar("ford", "flying focus", 0, "red");
+flyFocus.drive();
+flyFocus.honk();
+flyFocus.changeColor("blue");
+log(flyFocus.color);

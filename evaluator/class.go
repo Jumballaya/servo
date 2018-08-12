@@ -68,11 +68,17 @@ func evalNewClassInstance(node *ast.InstanceLiteral, env *object.Environment) ob
 	newEnv := object.NewEnclosedEnvironment(env)
 	instance := &object.Instance{Class: classObj, Fields: newEnv}
 	if instance.Class.Parent != nil {
-		for _, stmt := range instance.Class.Parent.Fields {
-			if stmt.Name.Value == "constructor" {
-				superFn := evalLetStatement(stmt, newEnv)
-				newEnv.Set("super", superFn)
+		var parent *object.Class
+		parent = instance.Class.Parent
+		for parent != nil {
+			for _, stmt := range parent.Fields {
+				if stmt.Name.Value == "constructor" {
+					newEnclosedEnv := object.NewEnclosedEnvironment(newEnv)
+					superFn := evalLetStatement(stmt, newEnclosedEnv)
+					newEnv.Set("super", superFn)
+				}
 			}
+			parent = parent.Parent
 		}
 	}
 	newEnv.Set("this", instance)
