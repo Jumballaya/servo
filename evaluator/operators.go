@@ -23,6 +23,10 @@ func evalPrefixExpression(operator string, right object.Object) object.Object {
 // Eval Infix Expression
 func evalInfixExpression(operator string, left, right object.Object) object.Object {
 	switch {
+	case operator == "instanceof":
+		l := left.(*object.Instance)
+		r := right.(*object.Class)
+		return nativeBooleanToBooleanObject(object.InstanceOf(r.Name, l))
 	case left.Type() == object.INTEGER_OBJ && right.Type() == object.INTEGER_OBJ:
 		return evalIntegerInfixExpression(operator, left, right)
 	case isNumber(left.Type()) && isNumber(right.Type()):

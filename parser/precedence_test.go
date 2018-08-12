@@ -89,6 +89,7 @@ func TestParsingInfixExpressions(t *testing.T) {
 		{"5 & 5;", 5, "&", 5},
 		{"5 | 5;", 5, "|", 5},
 		{"5 ^ 2;", 5, "^", 2},
+		{"e instanceof Example", "e", "instanceof", "Example"},
 	}
 
 	for _, tt := range infixTests {

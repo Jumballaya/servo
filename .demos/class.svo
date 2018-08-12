@@ -57,3 +57,5 @@ flyFocus.drive();
 flyFocus.honk();
 flyFocus.changeColor("blue");
 log(flyFocus.color);
+
+log(focus instanceof Car);

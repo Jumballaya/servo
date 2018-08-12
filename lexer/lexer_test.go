@@ -68,7 +68,10 @@ class Example {
 	"foo": null,
 	"bar": null,
 };
+
 let e = new Example();
+
+e instanceof Example;
 `
 
 	tests := []struct {
@@ -279,6 +282,10 @@ let e = new Example();
 		{token.IDENT, "Example"},
 		{token.LPAREN, "("},
 		{token.RPAREN, ")"},
+		{token.SEMICOLON, ";"},
+		{token.IDENT, "e"},
+		{token.INSTANCEOF, "instanceof"},
+		{token.IDENT, "Example"},
 		{token.SEMICOLON, ";"},
 		{token.EOF, ""},
 	}

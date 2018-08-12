@@ -45,10 +45,6 @@ None made so far
   * ~~Add simple classes with fields and methods and inheritance~~
   * ~~Rename structs/interfaces/functions to their proper names (Expression vs Statement etc.) so everything is consistent~~
   * Add instanceof operator for classes, e.g. `fooInstance instanceof FooClass`
-  * Add a standard library that can be imported into any file.
-    - ~~Basic support~~
-    - Standard lib files can be imported by itself (aka `import map from 'Array';`) and without extension
-    - Any other files have to be a relative path or absolute path to the file to import (aka `import func from './module.svo';`) and must have the file extension
   * Implement bytes
     - Syntax: `b{'|"}hello world{'|"}` or `b{"|'}h{"|'}`
     - Like strings they can be concatontated with the `+` operator like `b'h' + b'i' = b'hi'`
@@ -73,3 +69,7 @@ None made so far
   * Add `import func from './example.svo' as function` syntax to import
   * Change import so it builds the AST during the parsing stage rather than evaluation
   * Change array index expression to accept colons like `arr[1:3]` for a slice of the array
+  * Add a standard library that can be imported into any file.
+    - ~~Basic support~~
+    - Standard lib files can be imported by itself (aka `import map from 'Array';`) and without extension
+    - Any other files have to be a relative path or absolute path to the file to import (aka `import func from './module.svo';`) and must have the file extension
