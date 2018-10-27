@@ -1,7 +1,6 @@
 package repl
 
 import (
-	"bufio"
 	"fmt"
 	"io"
 
@@ -9,43 +8,22 @@ import (
 	"github.com/jumballaya/servo/lexer"
 	"github.com/jumballaya/servo/object"
 	"github.com/jumballaya/servo/parser"
+
+	prompt "github.com/c-bata/go-prompt"
 )
 
 const PROMPT = ">> "
 
+type Config struct {
+	Verbose bool
+}
+
+var env *object.Environment
+
 func Start(in io.Reader, out io.Writer, config *Config) {
-	scanner := bufio.NewScanner(in)
-	//env := stdlib.NewEnvironmentWithLib()
-	env := object.NewEnvironment()
-	//history := NewHistory()
-
-	for {
-		fmt.Printf(PROMPT)
-		scanned := scanner.Scan()
-		if !scanned {
-			return
-		}
-
-		line := scanner.Text()
-		//history.Insert(line)
-
-		l := lexer.New(line)
-		p := parser.New(l)
-
-		program := p.ParseProgram()
-		if len(p.Errors()) != 0 {
-			printParserErrors(out, p.Errors())
-			continue
-		}
-
-		evaluated := evaluator.Eval(program, env)
-		if config.Verbose {
-			if evaluated != nil {
-				fmt.Fprintf(out, evaluated.Inspect())
-				fmt.Fprintf(out, "\n")
-			}
-		}
-	}
+	env = object.NewEnvironment()
+	p := prompt.New(exec, completer, prompt.OptionPrefix(">> "))
+	p.Run()
 }
 
 func Run(input string, out io.Writer, config *Config) {

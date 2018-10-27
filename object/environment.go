@@ -30,6 +30,14 @@ func (e *Environment) Set(name string, val Object) Object {
 	return val
 }
 
+func (e *Environment) FullList() map[string]string {
+	list := make(map[string]string)
+	for name, v := range e.store {
+		list[name] = v.Inspect()
+	}
+	return list
+}
+
 func (e *Environment) List() []string {
 	list := []string{}
 	for name, _ := range e.store {
